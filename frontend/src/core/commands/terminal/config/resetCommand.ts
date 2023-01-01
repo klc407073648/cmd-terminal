@@ -3,7 +3,7 @@ import { useTerminalConfigStore } from "./terminalConfigStore";
 
 /**
  * 重置配置
- * @author yupi
+ * @author klc
  */
 const resetCommand: CommandType = {
   func: "reset",

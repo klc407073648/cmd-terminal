@@ -4,7 +4,7 @@ import ComponentOutputType = YuTerminal.ComponentOutputType;
 
 /**
  * 音乐命令
- * @author yupi
+ * @author klc
  */
 const musicCommand: CommandType = {
   func: "music",

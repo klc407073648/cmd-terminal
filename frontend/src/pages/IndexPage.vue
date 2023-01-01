@@ -1,5 +1,5 @@
 <template>
-  <yu-terminal
+  <cmd-terminal
     ref="terminalRef"
     :user="loginUser"
     full-screen

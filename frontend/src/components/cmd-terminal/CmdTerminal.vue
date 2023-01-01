@@ -1,10 +1,10 @@
 <template>
   <div
-    class="yu-terminal-wrapper"
+    class="cmd-terminal-wrapper"
     :style="wrapperStyle"
     @click="handleClickWrapper"
   >
-    <div ref="terminalRef" class="yu-terminal" :style="mainStyle">
+    <div ref="terminalRef" class="cmd-terminal" :style="mainStyle">
       <a-collapse
         v-model:activeKey="activeKeys"
         :bordered="false"
@@ -421,7 +421,7 @@ onMounted(() => {
  */
 function handleClickWrapper(event: Event): void {
   //@ts-ignore
-  if (event.target.className === "yu-terminal") {
+  if (event.target.className === "cmd-terminal") {
     focusInput();
   }
 }
@@ -432,25 +432,25 @@ defineExpose({
 </script>
 
 <style scoped>
-.yu-terminal-wrapper {
+.cmd-terminal-wrapper {
   background: black;
 }
 
-.yu-terminal {
+.cmd-terminal {
   background: rgba(0, 0, 0, 0.6);
   padding: 20px;
   overflow: scroll;
 }
 
-.yu-terminal::-webkit-scrollbar {
+.cmd-terminal::-webkit-scrollbar {
   display: none;
 }
 
-.yu-terminal span {
+.cmd-terminal span {
   font-size: 16px;
 }
 
-.yu-terminal
+.cmd-terminal
   :deep(.ant-collapse-icon-position-right
     > .ant-collapse-item
     > .ant-collapse-header) {
@@ -458,15 +458,15 @@ defineExpose({
   padding: 0;
 }
 
-.yu-terminal :deep(.ant-collapse) {
+.cmd-terminal :deep(.ant-collapse) {
   background: none;
 }
 
-.yu-terminal :deep(.ant-collapse-borderless > .ant-collapse-item) {
+.cmd-terminal :deep(.ant-collapse-borderless > .ant-collapse-item) {
   border: none;
 }
 
-.yu-terminal :deep(.ant-collapse-content > .ant-collapse-content-box) {
+.cmd-terminal :deep(.ant-collapse-content > .ant-collapse-content-box) {
   padding: 0;
 }
 

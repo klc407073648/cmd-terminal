@@ -3,7 +3,7 @@ import { CommandType } from "../command";
 
 /**
  * ping 命令
- * @author yupi
+ * @author klc
  */
 const pingCommand: CommandType = {
   func: "ping",

@@ -26,7 +26,7 @@
 import { reactive, ref, toRefs } from "vue";
 import { getNamedVariables } from "./hooks/api/rest/translate";
 import { parseNamedVariable } from "./hooks/character/standard";
-import ContentOutput from "../../../components/yu-terminal/ContentOutput.vue";
+import ContentOutput from "../../../components/cmd-terminal/ContentOutput.vue";
 import OutputType = YuTerminal.OutputType;
 
 interface VariableBoxProps {

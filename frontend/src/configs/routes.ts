@@ -4,7 +4,6 @@ import XTermPage from "../pages/old/XTermPage.vue";
 
 const routes: RouteRecordRaw[] = [
   { path: "/", component: IndexPage },
-  { path: "/old/xterm", component: XTermPage },
 ];
 
 export default routes;

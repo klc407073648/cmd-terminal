@@ -5,6 +5,8 @@ import TerminalType = YuTerminal.TerminalType;
  * 命令类型
  */
 interface CommandType {
+  //命令Id
+  id?: string;
   // 命令英文 key（必须唯一）
   func: string;
   // 命令名称

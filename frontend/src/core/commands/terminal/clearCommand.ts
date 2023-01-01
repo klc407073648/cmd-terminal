@@ -2,7 +2,7 @@ import { CommandType } from "../../command";
 
 /**
  * 清屏命令
- * @author yupi
+ * @author klc
  */
 const clearCommand: CommandType = {
   func: "clear",

@@ -21,9 +21,10 @@ declare module '@vue/runtime-core' {
     ASpin: typeof import('ant-design-vue/es')['Spin']
     ATable: typeof import('ant-design-vue/es')['Table']
     ATag: typeof import('ant-design-vue/es')['Tag']
-    ContentOutput: typeof import('./src/components/yu-terminal/ContentOutput.vue')['default']
+    CmdTerminal: typeof import('./src/components/cmd-terminal/CmdTerminal.vue')['default']
+    ContentOutput: typeof import('./src/components/cmd-terminal/ContentOutput.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    YuTerminal: typeof import('./src/components/yu-terminal/YuTerminal.vue')['default']
+    YuTerminal: typeof import('./src/components/cmd-terminal/CmdTerminal.vue')['default']
   }
 }
