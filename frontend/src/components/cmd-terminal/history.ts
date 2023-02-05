@@ -1,6 +1,6 @@
 import { Ref, ref } from "vue";
-import CommandOutputType = YuTerminal.CommandOutputType;
-import CommandInputType = YuTerminal.CommandInputType;
+import CommandOutputType = CmdTerminal.CommandOutputType;
+import CommandInputType = CmdTerminal.CommandInputType;
 
 /**
  * 查看历史功能

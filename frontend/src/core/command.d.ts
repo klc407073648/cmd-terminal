@@ -1,5 +1,5 @@
 import { ParsedOptions } from "getopts";
-import TerminalType = YuTerminal.TerminalType;
+import TerminalType = CmdTerminal.TerminalType;
 
 /**
  * 命令类型
@@ -13,6 +13,8 @@ interface CommandType {
   name: string;
   // 介绍
   desc?: string;
+  // 命令集
+  cmdSet?: string;
   // 功能别名
   alias?: string[];
   // 参数配置

@@ -1,6 +1,6 @@
 import { CommandType } from "../../../command";
 import { defineAsyncComponent } from "vue";
-import ComponentOutputType = YuTerminal.ComponentOutputType;
+import ComponentOutputType = CmdTerminal.ComponentOutputType;
 
 /**
  * 快捷键命令

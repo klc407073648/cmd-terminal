@@ -25,6 +25,5 @@ declare module '@vue/runtime-core' {
     ContentOutput: typeof import('./src/components/cmd-terminal/ContentOutput.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    YuTerminal: typeof import('./src/components/cmd-terminal/CmdTerminal.vue')['default']
   }
 }

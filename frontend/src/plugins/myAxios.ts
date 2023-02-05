@@ -19,6 +19,7 @@ myAxios.interceptors.request.use(
   },
   function (error) {
     // 对请求错误做些什么
+      console.log("添加请求拦截器error:"+error)
     return Promise.reject(error);
   }
 );
@@ -32,6 +33,8 @@ myAxios.interceptors.response.use(
   },
   function (error) {
     // 对响应错误做点什么
+      alert(error) //统一弹框处理
+      console.log("响应拦截器error:"+error)
     return Promise.reject(error);
   }
 );

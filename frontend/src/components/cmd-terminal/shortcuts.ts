@@ -2,13 +2,14 @@
  * 快捷键系统
  * @author klc
  */
-import TerminalType = YuTerminal.TerminalType;
+import TerminalType = CmdTerminal.TerminalType;
 
 /**
  * 注册快捷键
  * @param terminal
  */
 export const registerShortcuts = (terminal: TerminalType) => {
+  //VUE使用document.onkeydown键盘的监听
   document.onkeydown = (e) => {
     // console.log(e);
     let key = e.key;

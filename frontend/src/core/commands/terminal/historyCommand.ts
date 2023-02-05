@@ -14,7 +14,7 @@ const historyCommand: CommandType = {
     const commandOutputTypes = terminal.listCommandHistory();
     // terminal.writeTextResult(`⭐️ 输入 ![序号] 可以快速执行某条历史命令`);
     commandOutputTypes.forEach((command, index) => {
-      terminal.writeTextResult(`${index + 1} ${command.text}`);
+      terminal.writeTextResult(`${index + 1} ${command.text}`,"warning");
     });
   },
 };

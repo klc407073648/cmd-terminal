@@ -1,5 +1,7 @@
 import { CommandType } from "../../command";
+import useCommandOptionType from "../constants/CommandOptionType";
 
+const { searchContext,isOpenCur} = useCommandOptionType()
 /**
  * 百度搜索命令
  * @author klc
@@ -9,20 +11,10 @@ const baiduCommand: CommandType = {
   name: "百度搜索",
   alias: [],
   params: [
-    {
-      key: "word",
-      desc: "搜索内容",
-      required: true,
-    },
+    searchContext
   ],
   options: [
-    {
-      key: "self",
-      desc: "是否当前页面打开",
-      alias: ["s"],
-      type: "boolean",
-      defaultValue: false,
-    },
+    isOpenCur,
     {
       key: "picture",
       desc: "是否搜索图片",

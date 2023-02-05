@@ -16,7 +16,7 @@
 
 <script setup lang="ts">
 import smartText from "../../utils/smartText";
-import OutputType = YuTerminal.OutputType;
+import OutputType = CmdTerminal.OutputType;
 import { computed, toRefs } from "vue";
 
 interface OutputProps {
@@ -26,20 +26,21 @@ interface OutputProps {
 const props = defineProps<OutputProps>();
 const { output } = toRefs(props);
 const outputTagColor = computed((): string => {
+  console.log(output)
   if (!output.value.status) {
     return "";
   }
   switch (output.value.status) {
     case "info":
-      return "dodgerblue";
+      return "dodgerblue";//蓝色
     case "success":
-      return "limegreen";
+      return "limegreen";//绿色
     case "warning":
-      return "darkorange";
+      return "darkorange";//橙色
     case "error":
-      return "#c0300f";
+      return "#c0300f";//红色
     case "system":
-      return "#bfc4c9";
+      return "#bfc4c9";//灰色
     default:
       return "";
   }

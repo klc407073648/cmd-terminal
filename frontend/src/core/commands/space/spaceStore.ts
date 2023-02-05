@@ -83,10 +83,13 @@ export const useSpaceStore = defineStore("space", {
       const fullPath = getFullPath(item.dir, item.name);
       // 目录不存在
       if (!this.space[item.dir]) {
+        console.log("addItem 111")
         return false;
       }
+      console.log("addItem 111")
       // 文件已存在 todo 支持覆盖
       if (this.space[fullPath]) {
+        console.log("addItem 222")
         return false;
       }
       this.space[fullPath] = item;

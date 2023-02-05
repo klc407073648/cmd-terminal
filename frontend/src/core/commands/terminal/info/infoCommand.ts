@@ -1,6 +1,6 @@
 import { CommandType } from "../../../command";
 import { defineAsyncComponent } from "vue";
-import ComponentOutputType = YuTerminal.ComponentOutputType;
+import ComponentOutputType = CmdTerminal.ComponentOutputType;
 
 /**
  * 查看网站本身信息命令

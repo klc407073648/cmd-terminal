@@ -93,22 +93,23 @@ import {
   toRefs,
   watchEffect,
 } from "vue";
-import CommandOutputType = YuTerminal.CommandOutputType;
-import OutputType = YuTerminal.OutputType;
-import CommandInputType = YuTerminal.CommandInputType;
+import CommandOutputType = CmdTerminal.CommandOutputType;
+import OutputType = CmdTerminal.OutputType;
+import CommandInputType = CmdTerminal.CommandInputType;
 import { registerShortcuts } from "./shortcuts";
-import TerminalType = YuTerminal.TerminalType;
-import TextOutputType = YuTerminal.TextOutputType;
+import TerminalType = CmdTerminal.TerminalType;
+import TextOutputType = CmdTerminal.TextOutputType;
 import useHistory from "./history";
 import ContentOutput from "./ContentOutput.vue";
-import OutputStatusType = YuTerminal.OutputStatusType;
+import OutputStatusType = CmdTerminal.OutputStatusType;
 import { useTerminalConfigStore } from "../../core/commands/terminal/config/terminalConfigStore";
 import useHint from "./hint";
 import UserType = User.UserType;
-import { LOCAL_USER } from "../../core/commands/user/userConstant";
+import { LOCAL_USER } from "../../core/commands/manage/user/userConstant";
 import { defineStore } from "pinia";
+import {project_link,project_profile} from "../../constants/globalVar";
 
-interface YuTerminalProps {
+interface CmdTerminalProps {
   height?: string | number;
   fullScreen?: boolean;
   user?: UserType;
@@ -116,7 +117,8 @@ interface YuTerminalProps {
   onSubmitCommand?: (inputText: string) => void;
 }
 
-const props = withDefaults(defineProps<YuTerminalProps>(), {
+//作用是给defineProps绑定默认值
+const props = withDefaults(defineProps<CmdTerminalProps>(), {
   height: "400px",
   fullScreen: false,
   user: LOCAL_USER as any,
@@ -191,7 +193,9 @@ const doSubmitCommand = async () => {
   // 记录当前命令，便于写入结果
   currentNewCommand = newCommand;
   // 执行命令
-  await props.onSubmitCommand?.(inputText);
+  console.log('开始去执行IndexPage里的函数' + props)
+  await props.onSubmitCommand?.(inputText);//所有的 props 都遵循着单向绑定原则，props 因父组件的更新而变化，自然地将新的状态向下流往子组件，而不会逆向传递。
+  console.log('结束去执行IndexPage里的函数' + props)
   // 添加输出（为空也要输出换行）
   outputList.value.push(newCommand);
   // 不为空字符串才算是有效命令
@@ -211,6 +215,7 @@ const doSubmitCommand = async () => {
 };
 
 // 输入框内容改变时，触发输入提示
+// watchEffect所指定的回调中用到的数据只要发生变化，则直接重新执行回调。
 watchEffect(() => {
   debounceSetHint(inputCommand.value.text);
 });
@@ -268,7 +273,7 @@ const clear = () => {
  * @param text
  * @param status
  */
-const writeTextResult = (text: string, status?: OutputStatusType) => {
+const writeTextResult = (text: string, status: OutputStatusType ="success") => {
   const newOutput: TextOutputType = {
     text,
     type: "text",
@@ -406,10 +411,10 @@ onMounted(() => {
   } else {
     terminal.writeTextOutput(
       `Welcome to YuIndex, coolest browser index for geeks!` +
-        `<a href="//github.com/liyupi/yuindex" target='_blank'> GitHub Open Source</a>`
+        `<a href="//github.com/klc407073648/cmd-terminal" target='_blank'> GitHub Open Source</a>`
     );
     terminal.writeTextOutput(
-      `Author <a href="//docs.qq.com/doc/DUFFRVWladXVjeUxW" target="_blank">coder_yupi</a>` +
+      `Author <a href="//stibel.icu" target="_blank">coder_klc</a>` +
         `: please input 'help' to enjoy`
     );
     terminal.writeTextOutput("<br/>");
