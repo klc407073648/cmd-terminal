@@ -1,5 +1,5 @@
 import { CommandType } from "../../command";
-import useCommandOptionType from "../constants/CommandOptionType";
+import useCommandOptionType from "../../../constants/CommandOptionType";
 
 const { searchContext,isOpenCur} = useCommandOptionType()
 /**

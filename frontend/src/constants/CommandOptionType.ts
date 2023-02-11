@@ -1,4 +1,4 @@
-import {CommandOptionType, CommandParamsType} from "../../command";
+import {CommandOptionType, CommandParamsType} from "../core/command";
 
 /**
  * 常用命令选项类型

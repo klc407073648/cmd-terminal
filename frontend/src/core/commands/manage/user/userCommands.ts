@@ -41,4 +41,4 @@ const userCommand: CommandType = {
   },
 };
 
-export default [userCommand];
+export default userCommand;

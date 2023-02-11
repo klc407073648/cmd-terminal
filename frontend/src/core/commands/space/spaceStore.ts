@@ -1,5 +1,5 @@
-import { defineStore } from "pinia";
-import { SpaceItemType, SpaceType } from "./spaceCommands";
+import {defineStore} from "pinia";
+import {SpaceItemType, SpaceType} from "./space";
 
 /**
  * 空间状态（类似文件系统实现）

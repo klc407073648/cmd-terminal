@@ -1,7 +1,7 @@
 import { CommandType } from "../../../../command";
 import { defineAsyncComponent } from "vue";
 import ComponentOutputType = CmdTerminal.ComponentOutputType;
-import isOpenCur from "../../../constants/CommandOptionType";
+import isOpenCur from "../../../../../constants/CommandOptionType";
 
 const baseUrl = "https://www.baidu.com/s";
 

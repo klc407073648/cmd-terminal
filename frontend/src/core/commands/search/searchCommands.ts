@@ -6,14 +6,14 @@ import bingCommand from "./bingCommand";
 import githubCommand from "./githubCommand";
 import googleCommand from "./googleCommand";
 import zhihuCommand from "./zhihuCommand";
-import useCommandOptionType from "../constants/CommandOptionType";
+import useCommandOptionType from "../../../constants/CommandOptionType";
 
 const { searchContext,isOpenCur} = useCommandOptionType()
 
 /**
  * 搜索源
  */
-const fromDict: Record<string, CommandType> = {
+const fromdict: Record<string, CommandType> = {
   bilibili: bilibiliCommand,
   baidu: baiduCommand,
   baidudev: baidudevCommand,
@@ -49,7 +49,7 @@ const searchCommand: CommandType = {
   action: (options, terminal) => {
     const { from = "baidu" } = options;
     // 执行不同搜索源的搜索方法
-    const fromObj = fromDict[from];
+    const fromObj = fromdict[from];
     if (!fromObj) {
       terminal.writeTextErrorResult("找不到搜索源");
       return;
@@ -58,4 +58,4 @@ const searchCommand: CommandType = {
   },
 };
 
-export default [searchCommand, ...Object.values(fromDict)];
+export default [searchCommand, ...Object.values(fromdict)];

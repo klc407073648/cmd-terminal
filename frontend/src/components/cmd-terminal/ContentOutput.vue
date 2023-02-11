@@ -1,3 +1,4 @@
+
 <template>
   <div class="content-output">
     <template v-if="output.type === 'text'">

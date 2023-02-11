@@ -1,6 +1,6 @@
 import { CommandType } from "../../command";
 import { useSpaceStore } from "./spaceStore";
-import { SpaceItemType } from "./spaceCommands";
+import { SpaceItemType } from "./space";
 
 /**
  * 新增

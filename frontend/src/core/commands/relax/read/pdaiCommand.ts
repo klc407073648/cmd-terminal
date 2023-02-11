@@ -1,5 +1,5 @@
 import { CommandType } from "../../../command";
-import isOpenCur from "../../constants/CommandOptionType";
+import isOpenCur from "../../../../constants/CommandOptionType";
 
 
 /**

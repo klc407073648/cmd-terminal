@@ -33,7 +33,7 @@ myAxios.interceptors.response.use(
   },
   function (error) {
     // 对响应错误做点什么
-      alert(error) //统一弹框处理
+      //alert(error) //统一弹框处理
       console.log("响应拦截器error:"+error)
     return Promise.reject(error);
   }
