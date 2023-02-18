@@ -9,28 +9,21 @@
 #include <json/json.h>
 
 using namespace drogon;
-using namespace drogon_model::testuser;
+using namespace drogon_model::cmdterminal;
 using namespace drogon::orm;
-using namespace usercenter;
+using namespace cmdterminal;
 
 class UserController : public drogon::HttpController<UserController>
 {
 public:
   METHOD_LIST_BEGIN
-  // use METHOD_ADD to add your custom processing function here;
-  // METHOD_ADD(user::userRegister, "/register", Post);                  //path is /api/v1/User/{arg1}
-  // METHOD_ADD(user::userLogin, "/login", Post);  //path is /api/v1/User/{arg1}/detailinfo
-  // METHOD_ADD(user::userLogout, "/logout", Post);                 //path is /api/v1/User/{arg1}
-  // METHOD_ADD(user::searchUsers, "/search", Get);                 //path is /api/v1/User/{arg1}
-  // METHOD_ADD(user::getCurrentUser, "/current", Get);                 //path is /api/v1/User/{arg1}
-  // METHOD_ADD(user::deleteUsers, "/delete", Post);                 //path is /api/v1/User/{arg1}
 
-  ADD_METHOD_TO(UserController::userRegister, "/api/user/register", Post, Options); // path is /api/v1/User/{arg1}
-  ADD_METHOD_TO(UserController::userLogin, "/api/user/login", Post, Options);       // path is /api/v1/User/{arg1}/detailinfo
-  ADD_METHOD_TO(UserController::userLogout, "/api/user/logout", Post, Options);     // path is /api/v1/User/{arg1}
-  ADD_METHOD_TO(UserController::searchUsers, "/api/user/search", Get, Options);     // path is /api/v1/User/{arg1}
-  ADD_METHOD_TO(UserController::getCurrentUser, "/api/user/current", Get, Options); // path is /api/v1/User/{arg1}
-  ADD_METHOD_TO(UserController::deleteUsers, "/api/user/delete", Post, Options);    // path is /api/v1/User/{arg1}
+  ADD_METHOD_TO(UserController::userRegister, "/api/user/register", Post, Options);
+  ADD_METHOD_TO(UserController::userLogin, "/api/user/login", Post, Options);
+  ADD_METHOD_TO(UserController::userLogout, "/api/user/logout", Post, Options);
+  ADD_METHOD_TO(UserController::searchUsers, "/api/user/search", Get, Options);
+  ADD_METHOD_TO(UserController::getCurrentUser, "/api/user/current", Get, Options);
+  ADD_METHOD_TO(UserController::deleteUsers, "/api/user/delete", Post, Options);
 
   METHOD_LIST_END
 
@@ -43,7 +36,7 @@ public:
 
 public:
   UserController()
-      : userSrvPtr_(new UserServiceImpl())
+      : srvPtr_(new UserServiceImpl())
   {
     LOG_DEBUG << "UserController constructor!";
   }
@@ -51,9 +44,6 @@ public:
 private:
   bool isAdmin(const HttpRequestPtr &request);
 
-  // TODO
-  void retErrorJsonResponse(BusinessException &e);
-
 private:
-  UserServicePtr userSrvPtr_;
+  UserServicePtr srvPtr_;
 };

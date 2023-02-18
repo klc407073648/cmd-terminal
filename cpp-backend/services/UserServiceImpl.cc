@@ -3,7 +3,7 @@
 #include <constants/UserConstant.h>
 #include <regex>
 
-using namespace usercenter;
+using namespace cmdterminal;
 using namespace drogon::internal;
 
 long UserServiceImpl::userRegister(const std::string &userAccount, const std::string &userPassword, const std::string &checkPassword, const std::string &planetCode)

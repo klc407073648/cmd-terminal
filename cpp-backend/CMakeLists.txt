@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(usercenter CXX)
+project(cmdterminal CXX)
 
 include(CheckIncludeFileCXX)
 

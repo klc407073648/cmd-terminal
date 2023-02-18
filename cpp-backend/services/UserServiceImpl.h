@@ -10,9 +10,9 @@
 
 using namespace drogon;
 using namespace drogon::orm;
-using namespace drogon_model::testuser;
+using namespace drogon_model::cmdterminal;
 
-namespace usercenter
+namespace cmdterminal
 {
   class UserServiceImpl : public UserService
   {

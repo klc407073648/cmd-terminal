@@ -2,8 +2,9 @@
 #include <models/User.h>
 #include <constants/UserConstant.h>
 #include <common/Response2json.h>
+#include <common/HttpResponseUtils.h>
 
-using namespace usercenter;
+using namespace cmdterminal;
 
 // Add definition of your processing function here
 namespace drogon
@@ -17,9 +18,14 @@ namespace drogon
     {
         auto json = req.getJsonObject();
         auto jsonStr = (*json).toStyledString();
-        LOG_INFO << "UserController::fromRequest:" << jsonStr;
         auto userJson = (*json);
         auto user = User(userJson);
+
+        LOG_INFO << "UserController::fromRequest user:" << jsonStr;
+        LOG_INFO << "UserController::fromRequest method:" << req.getMethodString();
+        LOG_INFO << "UserController::fromRequest query string:" << req.getQuery();
+        LOG_INFO << "UserController::fromRequest Headers:" << unordered_map2string(req.getHeaders());
+        LOG_INFO << "UserController::fromRequest Parameters:" << unordered_map2string(req.getParameters());
         return user;
     }
 }
@@ -32,35 +38,23 @@ void UserController::userRegister(const HttpRequestPtr &request, std::function<v
 
     try
     {
-        if (reqUser.getUseraccount() == nullptr || reqUser.getUserpassword() == nullptr || checkPassword == "" )
-        {
-            throw BusinessException(ErrorCode::PARAMS_ERROR(), "入参中账号或密码或校验密码或星球编号不存在");
-        }
-
         std::string userAccount = reqUser.getValueOfUseraccount();
         std::string userPassword = reqUser.getValueOfUserpassword();
         // std::string checkPassword = checkPassword_;
-        //std::string planetCode = reqUser.getValueOfPlanetcode();
+        // std::string planetCode = reqUser.getValueOfPlanetcode();
 
         if (userAccount.size() == 0 || userPassword.size() == 0 || checkPassword.size() == 0)
         {
             throw BusinessException(ErrorCode::PARAMS_ERROR(), "入参中账号或密码或校验密码或星球编号为空");
         }
 
-        long id = userSrvPtr_->userRegister(userAccount, userPassword, checkPassword);
+        long id = srvPtr_->userRegister(userAccount, userPassword, checkPassword);
 
-        auto base = ResultUtils<long>::susscess(id);
-        auto json = Response2json<long>::rep2json(base);
-        auto resp = HttpResponse::newHttpJsonResponse(json);
-        callback(resp);
+        callNormalResponse(std::move(callback), id);
     }
     catch (BusinessException &e)
     {
-        LOG_INFO << "BusinessException error: message:" << e.what() << ",description" << e.getDescription();
-        auto base = ResultUtils<long>::error(e.getCode(), e.getMessage(), e.getDescription());
-        auto json = Response2json<long>::rep2json(base);
-        auto resp = HttpResponse::newHttpJsonResponse(json);
-        callback(resp);
+        callErrorResponse(std::move(callback), e);
     }
 }
 
@@ -70,11 +64,6 @@ void UserController::userLogin(const HttpRequestPtr &request, std::function<void
 
     try
     {
-        if (reqUser.getUseraccount() == nullptr || reqUser.getUserpassword() == nullptr)
-        {
-            throw BusinessException(ErrorCode::PARAMS_ERROR(), "入参中账号或密码不存在");
-        }
-
         std::string userAccount = reqUser.getValueOfUseraccount();
         std::string userPassword = reqUser.getValueOfUserpassword();
 
@@ -83,20 +72,12 @@ void UserController::userLogin(const HttpRequestPtr &request, std::function<void
             throw BusinessException(ErrorCode::PARAMS_ERROR(), "入参中账号或密码为空");
         }
 
-        auto user = userSrvPtr_->userLogin(userAccount, userPassword, request);
-
-        auto base = ResultUtils<User>::susscess(user);
-        auto json = Response2json<User>::rep2json(base);
-        auto resp = HttpResponse::newHttpJsonResponse(json);
-        callback(resp);
+        auto user = srvPtr_->userLogin(userAccount, userPassword, request);
+        callNormalResponse(std::move(callback), user);
     }
     catch (BusinessException &e)
     {
-        LOG_INFO << "BusinessException error: message:" << e.what() << ",description" << e.getDescription();
-        auto base = ResultUtils<long>::error(e.getCode(), e.getMessage(), e.getDescription());
-        auto json = Response2json<long>::rep2json(base);
-        auto resp = HttpResponse::newHttpJsonResponse(json);
-        callback(resp);
+        callErrorResponse(std::move(callback), e);
     }
 }
 
@@ -111,20 +92,13 @@ void UserController::userLogout(const HttpRequestPtr &request, std::function<voi
             throw BusinessException(ErrorCode::PARAMS_ERROR(), "请求为空");
         }
 
-        long result = userSrvPtr_->userLogout(request);
+        long result = srvPtr_->userLogout(request);
 
-        auto base = ResultUtils<long>::susscess(result);
-        auto json = Response2json<long>::rep2json(base);
-        auto resp = HttpResponse::newHttpJsonResponse(json);
-        callback(resp);
+        callNormalResponse(std::move(callback), result);
     }
     catch (BusinessException &e)
     {
-        LOG_INFO << "BusinessException error: message:" << e.what() << ",description" << e.getDescription();
-        auto base = ResultUtils<long>::error(e.getCode(), e.getMessage(), e.getDescription());
-        auto json = Response2json<long>::rep2json(base);
-        auto resp = HttpResponse::newHttpJsonResponse(json);
-        callback(resp);
+        callErrorResponse(std::move(callback), e);
     }
 }
 
@@ -140,22 +114,13 @@ void UserController::searchUsers(const HttpRequestPtr &request, std::function<vo
         }
 
         std::string username = request->getParameter("username");
-        LOG_INFO << "UserController::username" << username;
+        std::vector<User> userList = srvPtr_->userSearch(username);
 
-        std::vector<User> userList = userSrvPtr_->userSearch(username);
-
-        auto base = ResultUtils<std::vector<User>>::susscess(userList);
-        auto json = Response2json<std::vector<User>>::rep2json(base);
-        auto resp = HttpResponse::newHttpJsonResponse(json);
-        callback(resp);
+        callNormalResponse(std::move(callback), userList);
     }
     catch (BusinessException &e)
     {
-        LOG_INFO << "BusinessException error: message:" << e.what() << ",description" << e.getDescription();
-        auto base = ResultUtils<long>::error(e.getCode(), e.getMessage(), e.getDescription());
-        auto json = Response2json<long>::rep2json(base);
-        auto resp = HttpResponse::newHttpJsonResponse(json);
-        callback(resp);
+        callErrorResponse(std::move(callback), e);
     }
 }
 
@@ -173,23 +138,14 @@ void UserController::getCurrentUser(const HttpRequestPtr &request, std::function
         }
 
         User curentUser = request->getSession()->get<User>(USER_LOGIN_STATE);
-
         long userId = curentUser.getValueOfId();
+        User user = srvPtr_->userCurrent(userId);
 
-        User user = userSrvPtr_->userCurrent(userId);
-
-        auto base = ResultUtils<User>::susscess(user);
-        auto json = Response2json<User>::rep2json(base);
-        auto resp = HttpResponse::newHttpJsonResponse(json);
-        callback(resp);
+        callNormalResponse(std::move(callback), user);
     }
     catch (BusinessException &e)
     {
-        LOG_INFO << "BusinessException error: message:" << e.what() << ",description" << e.getDescription();
-        auto base = ResultUtils<long>::error(e.getCode(), e.getMessage(), e.getDescription());
-        auto json = Response2json<long>::rep2json(base);
-        auto resp = HttpResponse::newHttpJsonResponse(json);
-        callback(resp);
+        callErrorResponse(std::move(callback), e);
     }
 }
 
@@ -211,20 +167,14 @@ void UserController::deleteUsers(const HttpRequestPtr &request, std::function<vo
             throw BusinessException(ErrorCode::PARAMS_ERROR(), "用户id不合法");
         }
 
-        bool ret = userSrvPtr_->userDelete(id);
+        bool ret = srvPtr_->userDelete(id);
 
-        auto base = ResultUtils<bool>::susscess(ret);
-        auto json = Response2json<bool>::rep2json(base);
-        auto resp = HttpResponse::newHttpJsonResponse(json);
-        callback(resp);
+        callNormalResponse(std::move(callback), ret);
     }
     catch (BusinessException &e)
     {
-        LOG_INFO << "BusinessException error: message:" << e.what() << ",description" << e.getDescription();
-        auto base = ResultUtils<long>::error(e.getCode(), e.getMessage(), e.getDescription());
-        auto json = Response2json<long>::rep2json(base);
-        auto resp = HttpResponse::newHttpJsonResponse(json);
-        callback(resp);
+
+        callErrorResponse(std::move(callback), e);
     }
 }
 
@@ -244,8 +194,4 @@ bool UserController::isAdmin(const HttpRequestPtr &request)
     }
 
     return false;
-}
-
-void UserController::retErrorJsonResponse(BusinessException &e)
-{
 }

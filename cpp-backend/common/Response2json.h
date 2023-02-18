@@ -19,6 +19,26 @@ public:
     {
         Json::Value ret;
         ret["code"] = rep.getCode();
+        ret["data"] = static_cast<T>(rep.getData());
+        ret["message"] = rep.getMessage();
+        ret["description"] = rep.getDescription();
+        return ret;
+    }
+};
+
+/**
+ * @brief Response2json 模板类
+ *
+ * @tparam T
+ */
+template <>
+class Response2json<long> 
+{
+public:
+    static Json::Value rep2json(BaseResponse<long> rep)
+    {
+        Json::Value ret;
+        ret["code"] = rep.getCode();
         ret["data"] = static_cast<Json::Int64>(rep.getData());
         ret["message"] = rep.getMessage();
         ret["description"] = rep.getDescription();

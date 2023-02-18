@@ -23,23 +23,36 @@ create table if not exists cmdterminal.`user`
 
 -- 用户表设计时，考虑伙伴匹配系统、用户中心系统、开发api接口， 对于用户表的设计，兼容处理。（后端处理时，根据请求的项目不同，设计标签）
 
-create table if not exists cmdterminal.`3part_interface_info`
+create table if not exists cmdterminal.`interface`
 (
     `id`                 bigint                               not null auto_increment comment '主键' primary key,
     `name`               varchar(256)                         not null comment '名称',
     `description`        varchar(256)                         null comment '描述',
     `url`                varchar(512)                         null comment '接口地址',
+    `method`             varchar(256)                         not null comment '请求类型',
     `requestParams`      text                                 null comment '请求参数',
     `requestHeader`      text                                 null comment '请求头',
     `responseHeader`     text                                 null comment '响应头',
     `status`             int default 0                        not null comment '接口状态（0-关闭，1-开启）',
-    `method`             varchar(256)                         not null comment '请求类型',
+    `type`               int default 0                        not null comment '接口类型（0-内部接口，1-第三方接口）',
     `createTime`         datetime default CURRENT_TIMESTAMP   not null comment '创建时间',
     `updateTime`         datetime default CURRENT_TIMESTAMP   not null on update CURRENT_TIMESTAMP comment '更新时间',
     `isDelete`           tinyint default 0                    not null comment   '是否删除(0-未删, 1-已删)'
-) ENGINE = InnoDB COMMENT = '第三方接口信息' character set = utf8;
+) ENGINE = InnoDB COMMENT = '接口信息' character set = utf8;
 
---- 调用第三方提供的方法
+INSERT INTO `interface` VALUES (1, 'getBackground', 'getBackground', 'https://api.btstu.cn/sjbz/api.php?lx=dongman&format=json', NULL, NULL, '', 0, 'Get', '2023-2-16 14:47:16', '2023-2-16 14:47:16', 0);
+
+
+create table if not exists cmdterminal.`operation_log`
+(
+    `id`                 bigint                               not null auto_increment comment '主键' primary key,
+    `name`               varchar(256)                         not null comment '操作命令名称',
+    `createTime`         datetime default CURRENT_TIMESTAMP   not null comment '创建时间',
+    `updateTime`         datetime default CURRENT_TIMESTAMP   not null on update CURRENT_TIMESTAMP comment '更新时间',
+    `isDelete`           tinyint default 0                    not null comment   '是否删除(0-未删, 1-已删)'
+) ENGINE = InnoDB COMMENT = '接口信息' character set = utf8;
+
+--- 接口信息
 
 
 

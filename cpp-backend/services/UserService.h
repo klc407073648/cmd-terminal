@@ -7,10 +7,10 @@
 #include <drogon/HttpController.h>
 
 using namespace drogon;
-using namespace drogon_model::testuser;
+using namespace drogon_model::cmdterminal;
 
 // UserService 纯虚函数，接口类
-namespace usercenter
+namespace cmdterminal
 {
   static std::string S_PLANET_CODE = "10000";
 
