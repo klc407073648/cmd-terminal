@@ -1,5 +1,5 @@
 <template>
-  <div>关于本站：YuIndex 极客范儿的浏览器主页</div>
+  <div>关于本站：cmdTerminal 极客范儿的浏览器主页</div>
   <div>
     <a :href="project_link" target="_blank">
       代码开源，欢迎 star 和贡献~

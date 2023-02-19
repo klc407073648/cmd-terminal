@@ -7,9 +7,9 @@
   "chrome_url_overrides" : {
     "newtab": "index.html"
   },
-  "homepage_url": "https://yuindex.com/",
+  "homepage_url": "https://cmdTerminal.com/",
   "minimum_chrome_version": "81.0.0",
   "offline_enabled": true,
   "permissions": ["tabs"],
-  "short_name": "yuindex"
+  "short_name": "cmdTerminal"
 }

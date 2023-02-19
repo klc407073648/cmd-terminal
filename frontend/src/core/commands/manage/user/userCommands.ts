@@ -29,8 +29,8 @@ const userCommand: CommandType = {
   options: [],
   async action(options, terminal) {
     const { loginUser } = useUserStore();
-    if (loginUser && loginUser.username !== LOCAL_USER.username) {
-      let text = `当前用户：${loginUser.username}`;
+    if (loginUser && loginUser.userAccount !== LOCAL_USER.userAccount) {
+      let text = `当前用户：${loginUser.userAccount}`;
       if (loginUser.email) {
         text += ` ${loginUser.email}`;
       }

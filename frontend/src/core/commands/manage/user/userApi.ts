@@ -2,14 +2,14 @@ import myAxios from "../../../../plugins/myAxios";
 
 /**
  * 用户登录
- * @param username
- * @param password
+ * @param userAccount
+ * @param userPassword
  */
-export const userLogin = async (username: string, password: string) => {
-  if (!username || !password) {
+export const userLogin = async (userAccount: string, userPassword: string) => {
+  if (!userAccount || !userPassword) {
     return null;
   }
-  return await myAxios.post("/user/login", { username, password });
+  return await myAxios.post("/user/login", { userAccount, userPassword });
 };
 
 /**
@@ -21,24 +21,24 @@ export const userLogout = async () => {
 
 /**
  * 用户注册
- * @param username
- * @param password
- * @param email
+ * @param userAccount
+ * @param userPassword
+ * @param checkPassword
  */
 export const userRegister = async (
-  username: string,
-  password: string,
-  email: string
+  userAccount: string,
+  userPassword: string,
+  checkPassword: string
 ) => {
-  if (!username || !password || !email) {
+  if (!userAccount || !userPassword || !checkPassword) {
     return null;
   }
-  return await myAxios.post("/user/register", { username, password, email });
+  return await myAxios.post("/user/register", { userAccount, userPassword, checkPassword });
 };
 
 /**
  * 获取当前登录用户
  */
 export const getLoginUser = async () => {
-  return await myAxios.post("/user/current");
+  return await myAxios.get("/user/current");
 };

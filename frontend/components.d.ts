@@ -18,8 +18,6 @@ declare module '@vue/runtime-core' {
     AListItem: typeof import('ant-design-vue/es')['ListItem']
     AListItemMeta: typeof import('ant-design-vue/es')['ListItemMeta']
     ARow: typeof import('ant-design-vue/es')['Row']
-    ASpin: typeof import('ant-design-vue/es')['Spin']
-    ATable: typeof import('ant-design-vue/es')['Table']
     ATag: typeof import('ant-design-vue/es')['Tag']
     CmdTerminal: typeof import('./src/components/cmd-terminal/CmdTerminal.vue')['default']
     ContentOutput: typeof import('./src/components/cmd-terminal/ContentOutput.vue')['default']

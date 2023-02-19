@@ -224,7 +224,7 @@ watchEffect(() => {
  * 输入提示符
  */
 const prompt = computed(() => {
-  return `[${user.value.username}]$`;
+  return `[${user.value.userAccount}]$`;
 });
 
 /**
@@ -410,7 +410,7 @@ onMounted(() => {
     });
   } else {
     terminal.writeTextOutput(
-      `Welcome to YuIndex, coolest browser index for geeks!` +
+      `Welcome to cmdTerminal, coolest browser index for geeks!` +
         `<a href="//github.com/klc407073648/cmd-terminal" target='_blank'> GitHub Open Source</a>`
     );
     terminal.writeTextOutput(

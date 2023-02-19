@@ -18,8 +18,8 @@ class InterfaceController : public drogon::HttpController<InterfaceController>
 public:
   METHOD_LIST_BEGIN
   
-  ADD_METHOD_TO(InterfaceController::getBackground, "/api/background/get/random", Get, Options); 
-  ADD_METHOD_TO(InterfaceController::getTranslate, "/api/fanyi/translate", Get, Options);
+  ADD_METHOD_TO(InterfaceController::getBackground, "/api/background/get/random", Post, Options); 
+  ADD_METHOD_TO(InterfaceController::getTranslate, "/api/fanyi/translate", Post, Options);
   
   METHOD_LIST_END
 

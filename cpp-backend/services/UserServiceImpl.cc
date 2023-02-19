@@ -90,7 +90,7 @@ long UserServiceImpl::userRegister(const std::string &userAccount, const std::st
     // bool res = userMapper.save(user);
     userMapper.insert(user);
 
-    ret = userMapper.findBy(Criteria(User::Cols::_planetCode, CompareOperator::EQ, planetCode));
+    ret = userMapper.findBy(Criteria(User::Cols::_userAccount, CompareOperator::EQ, userAccount));
     if (ret.size() != 1)
     {
         throw BusinessException(ErrorCode::PARAMS_ERROR(), "插入数据失败");

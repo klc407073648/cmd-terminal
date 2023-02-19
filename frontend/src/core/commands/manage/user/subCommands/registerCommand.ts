@@ -11,46 +11,46 @@ const registerCommand: CommandType = {
   name: "用户注册",
   options: [
     {
-      key: "username",
+      key: "userAccount",
       desc: "用户名",
       alias: ["u"],
       type: "string",
       required: true,
     },
     {
-      key: "password",
+      key: "userPassword",
       desc: "密码",
       alias: ["p"],
       type: "string",
       required: true,
     },
     {
-      key: "email",
-      desc: "邮箱",
-      alias: ["e"],
+      key: "checkPassword",
+      desc: "校验密码",
+      alias: ["c"],
       type: "string",
       required: true,
     },
   ],
   async action(options, terminal) {
-    const { username, password, email } = options;
-    if (!username) {
+    const { userAccount, userPassword, checkPassword } = options;
+    if (!userAccount) {
       terminal.writeTextErrorResult("请输入用户名");
       return;
     }
-    if (!password) {
+    if (!userPassword) {
       terminal.writeTextErrorResult("请输入密码");
       return;
     }
-    if (!email) {
-      terminal.writeTextErrorResult("请输入邮箱");
+    if (!checkPassword) {
+      terminal.writeTextErrorResult("请输入校验密码");
       return;
     }
-    const res: any = await userRegister(username, password, email);
+    const res: any = await userRegister(userAccount, userPassword, checkPassword);
     if (res?.code === 0) {
       terminal.writeTextSuccessResult("注册成功");
     } else {
-      terminal.writeTextErrorResult(res?.message ?? "注册失败");
+      terminal.writeTextErrorResult((res?.message + ":" + res?.description) ?? "注册失败");
     }
   },
 };

@@ -9,7 +9,7 @@
 
 static void callErrorResponse(std::function<void(const HttpResponsePtr &)> &&callback, BusinessException &e)
 {
-    LOG_INFO << "BusinessException error: message:" << e.what() << ",description" << e.getDescription();
+    LOG_ERROR << "BusinessException error: message:" << e.what() << ",description" << e.getDescription();
     auto base = ResultUtils<long>::error(e.getCode(), e.getMessage(), e.getDescription());
     auto json = Response2json<long>::rep2json(base);
     auto resp = HttpResponse::newHttpJsonResponse(json);
