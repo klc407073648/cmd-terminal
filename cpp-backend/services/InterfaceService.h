@@ -1,13 +1,7 @@
-#pragma once
+#ifndef __INTERFACE_SERVICE_H__
+#define __INTERFACE_SERVICE_H__
 
-#include <memory>
 #include <string>
-#include <vector>
-#include <models/Interface.h>
-#include <drogon/HttpController.h>
-
-using namespace drogon;
-using namespace drogon_model::cmdterminal;
 
 // InterfaceService 纯虚函数，接口类
 namespace cmdterminal
@@ -31,6 +25,7 @@ namespace cmdterminal
      *
      */
     virtual std::string getTranslate() = 0;
-
   };
 }
+
+#endif //__INTERFACE_SERVICE_H__

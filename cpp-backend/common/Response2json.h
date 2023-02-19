@@ -1,11 +1,13 @@
 #pragma once
 
+#include <models/User.h>
+#include <common/BaseResponse.h>
 #include <iostream>
 #include <string>
 #include <vector>
 #include <json/json.h>
-#include "BaseResponse.h"
 
+using drogon_model::cmdterminal::User;
 /**
  * @brief Response2json 模板类
  *

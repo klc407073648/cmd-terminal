@@ -1,30 +1,20 @@
-#pragma once
+#ifndef __USER_SERVICE_IMPL_H__
+#define __USER_SERVICE_IMPL_H__
 
-#include <memory>
-#include <string>
 #include <models/User.h>
-#include <common/BaseResponse.h>
-#include <common/ErrorCode.h>
-#include <exception/BusinessException.h>
-#include "UserService.h"
+#include <services/UserService.h>
+#include <drogon/drogon.h>
 
-using namespace drogon;
-using namespace drogon::orm;
-using namespace drogon_model::cmdterminal;
+using drogon_model::cmdterminal::User;
 
 namespace cmdterminal
 {
   class UserServiceImpl : public UserService
   {
   public:
-    UserServiceImpl()
-    {
-    }
-
-    ~UserServiceImpl()
-    {
-    }
-
+    UserServiceImpl();
+    ~UserServiceImpl();
+  
     long userRegister(const std::string &userAccount, const std::string &userPassword, const std::string &checkPassword, const std::string &planetCode=S_PLANET_CODE) override;
 
     User userLogin(const std::string &userAccount, const std::string &userPassword, const HttpRequestPtr &request) override;
@@ -45,6 +35,8 @@ namespace cmdterminal
     std::string encryptPwd(const std::string &str);     //密码加密
 
   private:
-    Mapper<User> userMapper = Mapper<User>(app().getDbClient()); //对象持久化映射层,连接User对象和数据库
+    Mapper<User> userMapper = drogon::orm::Mapper<User>(drogon::app().getDbClient()); //对象持久化映射层,连接User对象和数据库
   };
 }
+
+#endif //__USER_SERVICE_IMPL_H__

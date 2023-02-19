@@ -1,13 +1,14 @@
-#pragma once
+#ifndef __USER_SERVICE_H__
+#define __USER_SERVICE_H__
 
 #include <memory>
 #include <string>
 #include <vector>
+#include <drogon/drogon.h>
 #include <models/User.h>
-#include <drogon/HttpController.h>
 
+using drogon_model::cmdterminal::User;
 using namespace drogon;
-using namespace drogon_model::cmdterminal;
 
 // UserService 纯虚函数，接口类
 namespace cmdterminal
@@ -83,3 +84,5 @@ namespace cmdterminal
 
   };
 }
+
+#endif //__USER_SERVICE_H__

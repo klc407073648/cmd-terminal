@@ -1,40 +1,29 @@
-#pragma once
+#ifndef __INTERFACE_CONTROLLER_H__
+#define __INTERFACE_CONTROLLER_H__
 
-#include <drogon/HttpController.h>
-#include <drogon/orm/Mapper.h>
+#include <drogon/drogon.h>
 #include <services/InterfaceServiceImpl.h>
-#include <models/User.h>
-#include <common/ResultUtils.h>
-#include <string>
-#include <json/json.h>
+#include <memory>
 
 using namespace drogon;
-using namespace drogon_model::cmdterminal;
-using namespace drogon::orm;
-using namespace cmdterminal;
+using cmdterminal::InterfaceServicePtr;
 
-class InterfaceController : public drogon::HttpController<InterfaceController>
+class InterfaceController : public HttpController<InterfaceController>
 {
 public:
   METHOD_LIST_BEGIN
-  
-  ADD_METHOD_TO(InterfaceController::getBackground, "/api/background/get/random", Post, Options); 
+  ADD_METHOD_TO(InterfaceController::getBackground, "/api/background/get/random", Post, Options);
   ADD_METHOD_TO(InterfaceController::getTranslate, "/api/fanyi/translate", Post, Options);
-  
   METHOD_LIST_END
+
+  InterfaceController();
+  ~InterfaceController();
 
   void getBackground(const HttpRequestPtr &request, std::function<void(const HttpResponsePtr &)> &&callback);
   void getTranslate(const HttpRequestPtr &request, std::function<void(const HttpResponsePtr &)> &&callback);
-  
-public:
-  InterfaceController()
-      : srvPtr_(new InterfaceServiceImpl())
-  {
-    LOG_DEBUG << "InterfaceController constructor!";
-  }
-
-private:
 
 private:
   InterfaceServicePtr srvPtr_;
 };
+
+#endif //__INTERFACE_CONTROLLER_H__

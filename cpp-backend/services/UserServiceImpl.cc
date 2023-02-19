@@ -1,14 +1,26 @@
 #include "UserServiceImpl.h"
 #include <trantor/utils/Utilities.h>
 #include <constants/UserConstant.h>
+#include <common/ErrorCode.h>
+#include <exception/BusinessException.h>
 #include <regex>
 
+using namespace drogon;
 using namespace cmdterminal;
 using namespace drogon::internal;
 
+UserServiceImpl::UserServiceImpl()
+{
+    LOG_DEBUG << "UserServiceImpl constructor!";
+}
+
+UserServiceImpl::~UserServiceImpl()
+{
+    LOG_DEBUG << "UserServiceImpl destructor!";
+}
+
 long UserServiceImpl::userRegister(const std::string &userAccount, const std::string &userPassword, const std::string &checkPassword, const std::string &planetCode)
 {
-    LOG_INFO << "UserServiceImpl::userRegister in";
     LOG_INFO << "userAccount:" << userAccount;
     LOG_INFO << "userPassword:" << userPassword;
     LOG_INFO << "checkPassword:" << checkPassword;
@@ -100,7 +112,6 @@ long UserServiceImpl::userRegister(const std::string &userAccount, const std::st
 }
 User UserServiceImpl::userLogin(const std::string &userAccount, const std::string &userPassword, const HttpRequestPtr &request)
 {
-    LOG_INFO << "UserServiceImpl::userLogin in";
     LOG_INFO << "userAccount:" << userAccount;
     LOG_INFO << "userPassword:" << userPassword;
 
@@ -152,9 +163,7 @@ User UserServiceImpl::userLogin(const std::string &userAccount, const std::strin
 
 std::vector<User> UserServiceImpl::userSearch(const std::string &username)
 {
-    LOG_INFO << "UserServiceImpl::userSearch in";
-	
-	std::vector<User> userList;
+    std::vector<User> userList;
 	
 	if(username==""){
 		userList = userMapper.findAll();
@@ -174,8 +183,6 @@ std::vector<User> UserServiceImpl::userSearch(const std::string &username)
 
 User UserServiceImpl::userCurrent(long id)
 {
-    LOG_INFO << "UserServiceImpl::userCurrent in";
-
     try
     {
         auto user = userMapper.findOne(Criteria(User::Cols::_id, CompareOperator::EQ, id));
@@ -193,8 +200,6 @@ User UserServiceImpl::userCurrent(long id)
 
 bool UserServiceImpl::userDelete(long id)
 {
-    LOG_INFO << "UserServiceImpl::userDelete in";
-
     try
     {
         long ret = userMapper.deleteBy(Criteria(User::Cols::_id, CompareOperator::EQ, id));
@@ -220,7 +225,6 @@ long UserServiceImpl::userLogout(const HttpRequestPtr &request)
 
 User UserServiceImpl::getSafetyUser(User originUser)
 {
-
     User safetyUser;
     safetyUser.setId(originUser.getValueOfId());
     safetyUser.setUsername(originUser.getValueOfUsername());

@@ -1,37 +1,26 @@
-#pragma once
+#ifndef __INTERFACE_SERVICE_IMPL_H__
+#define __INTERFACE_SERVICE_IMPL_H__
 
-#include <memory>
-#include <string>
 #include <models/Interface.h>
-#include <common/BaseResponse.h>
-#include <common/ErrorCode.h>
-#include <exception/BusinessException.h>
-#include "InterfaceService.h"
+#include <services/InterfaceService.h>
+#include <drogon/drogon.h>
 
-using namespace drogon;
-using namespace drogon::orm;
-using namespace drogon_model::cmdterminal;
+using drogon_model::cmdterminal::Interface;
 
 namespace cmdterminal
 {
   class InterfaceServiceImpl : public InterfaceService
   {
   public:
-    InterfaceServiceImpl()
-    {
-    }
-
-    ~InterfaceServiceImpl()
-    {
-    }
+    InterfaceServiceImpl();
+    ~InterfaceServiceImpl();
 
     std::string getBackground() override;
-
     std::string getTranslate() override;
 
   private:
-
-  private:
-    Mapper<Interface> InterfaceMapper = Mapper<Interface>(app().getDbClient()); //对象持久化映射层,连接User对象和数据库
+    Mapper<Interface> InterfaceMapper = drogon::orm::Mapper<Interface>(drogon::app().getDbClient()); // 对象持久化映射层,连接User对象和数据库
   };
 }
+
+#endif //__INTERFACE_SERVICE_IMPL_H__

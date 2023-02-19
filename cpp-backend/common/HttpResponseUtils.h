@@ -1,26 +1,36 @@
 #pragma once
 
+#include <drogon/HttpResponse.h>
+#include <common/ResultUtils.h>
+#include <common/Response2json.h>
+#include <exception/BusinessException.h>
 #include <iostream>
 #include <string>
-#include "ResultUtils.h"
-#include "BaseResponse.h"
-#include <drogon/HttpResponse.h>
 #include <unordered_map>
 
-static void callErrorResponse(std::function<void(const HttpResponsePtr &)> &&callback, BusinessException &e)
+//获取调用者函数的名称
+static void callErrorResponse(std::function<void(const HttpResponsePtr &)> &&callback, BusinessException &e,std::string str = __builtin_FUNCTION())
 {
-    LOG_ERROR << "BusinessException error: message:" << e.what() << ",description" << e.getDescription();
+    std::string callFunName = str;
     auto base = ResultUtils<long>::error(e.getCode(), e.getMessage(), e.getDescription());
     auto json = Response2json<long>::rep2json(base);
+
+    LOG_ERROR << "[callErrorResponse] callFunName:" << callFunName <<", error response:" << json.toStyledString();
+
     auto resp = HttpResponse::newHttpJsonResponse(json);
     callback(resp);
 }
 
 template <class T>
-static void callNormalResponse(std::function<void(const HttpResponsePtr &)> &&callback, T value)
+static void callNormalResponse(std::function<void(const HttpResponsePtr &)> &&callback, T value,std::string str = __builtin_FUNCTION())
 {
+    std::string callFunName = str;
+    
     auto base = ResultUtils<decltype(value)>::susscess(value);
     auto json = Response2json<decltype(value)>::rep2json(base);
+
+    LOG_ERROR << "[callErrorResponse] callFunName:" << callFunName <<", normal response:" << json.toStyledString();
+
     auto resp = HttpResponse::newHttpJsonResponse(json);
     callback(resp);
 }
