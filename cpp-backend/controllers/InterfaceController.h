@@ -3,7 +3,6 @@
 
 #include <drogon/drogon.h>
 #include <services/InterfaceServiceImpl.h>
-#include <memory>
 
 using namespace drogon;
 using cmdterminal::InterfaceServicePtr;
@@ -12,7 +11,7 @@ class InterfaceController : public HttpController<InterfaceController>
 {
 public:
   METHOD_LIST_BEGIN
-  ADD_METHOD_TO(InterfaceController::getBackground, "/api/background/get/random", Post, Options);
+  ADD_METHOD_TO(InterfaceController::getBackground, "/api/background/get/random", Post, Options,"LoginFilter");
   ADD_METHOD_TO(InterfaceController::getTranslate, "/api/fanyi/translate", Post, Options);
   METHOD_LIST_END
 

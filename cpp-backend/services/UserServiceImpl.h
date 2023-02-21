@@ -15,7 +15,7 @@ namespace cmdterminal
     UserServiceImpl();
     ~UserServiceImpl();
   
-    long userRegister(const std::string &userAccount, const std::string &userPassword, const std::string &checkPassword, const std::string &planetCode=S_PLANET_CODE) override;
+    long userRegister(const std::string &userAccount, const std::string &userPassword, const std::string &checkPassword, const std::string &planetCode) override;
 
     User userLogin(const std::string &userAccount, const std::string &userPassword, const HttpRequestPtr &request) override;
 
@@ -28,6 +28,8 @@ namespace cmdterminal
     bool userDelete(long id) override;
 
     std::vector<User> searchUsersByTags(std::vector<std::string> tagNameList) override;
+
+    bool isAdmin(const HttpRequestPtr &request) override;  
 
   private:
     User getSafetyUser(User originUser);                //获取脱密后的用户

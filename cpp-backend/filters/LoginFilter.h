@@ -6,16 +6,21 @@
 
 #pragma once
 
+#include <services/UserServiceImpl.h>
 #include <drogon/HttpFilter.h>
-using namespace drogon;
 
+using namespace drogon;
+using namespace cmdterminal;
 
 class LoginFilter : public HttpFilter<LoginFilter>
 {
   public:
-    LoginFilter() {}
+    LoginFilter():srvPtr_(new UserServiceImpl()) {}
+
     virtual void doFilter(const HttpRequestPtr &req,
                           FilterCallback &&fcb,
                           FilterChainCallback &&fccb) override;
+  private:
+    UserServicePtr srvPtr_;
 };
 

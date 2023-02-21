@@ -264,3 +264,19 @@ std::string UserServiceImpl::encryptPwd(const std::string &str)
 std::vector<User> UserServiceImpl::searchUsersByTags(std::vector<std::string> tagNameList)
 {
 }
+
+bool UserServiceImpl::isAdmin(const HttpRequestPtr &request)
+{
+    bool isFind = request->getSession()->find(USER_LOGIN_STATE);
+
+    if (isFind)
+    {
+        User user = request->getSession()->get<User>(USER_LOGIN_STATE);
+        if (user.getValueOfUserrole() == ADMIN_ROLE)
+        {
+            return true;
+        }
+    }
+
+    return false;
+}

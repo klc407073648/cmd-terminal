@@ -1,10 +1,20 @@
 #include "UserController.h"
-#include <models/User.h>
 #include <constants/UserConstant.h>
-#include <common/Response2json.h>
 #include <common/HttpResponseUtils.h>
+#include <string>
+#include <json/json.h>
 
 using namespace cmdterminal;
+
+UserController::UserController(): srvPtr_(new UserServiceImpl())
+{
+    LOG_DEBUG << "UserController constructor!";
+}
+
+UserController::~UserController()
+{
+    LOG_DEBUG << "UserController destructor!";
+}
 
 // Add definition of your processing function here
 namespace drogon
@@ -32,8 +42,6 @@ namespace drogon
 
 void UserController::userRegister(const HttpRequestPtr &request, std::function<void(const HttpResponsePtr &)> &&callback, User &&reqUser)
 {
-    LOG_INFO << "UserController::userRegister in";
-
     std::string checkPassword = ((*(request->getJsonObject()))["checkPassword"]).asString();
 
     try
@@ -60,8 +68,6 @@ void UserController::userRegister(const HttpRequestPtr &request, std::function<v
 
 void UserController::userLogin(const HttpRequestPtr &request, std::function<void(const HttpResponsePtr &)> &&callback, User &&reqUser)
 {
-    LOG_INFO << "UserController::userLogin in";
-
     try
     {
         std::string userAccount = reqUser.getValueOfUseraccount();
@@ -83,8 +89,6 @@ void UserController::userLogin(const HttpRequestPtr &request, std::function<void
 
 void UserController::userLogout(const HttpRequestPtr &request, std::function<void(const HttpResponsePtr &)> &&callback)
 {
-    LOG_INFO << "UserController::userLogout in";
-
     try
     {
         if (request == nullptr)
@@ -104,11 +108,9 @@ void UserController::userLogout(const HttpRequestPtr &request, std::function<voi
 
 void UserController::searchUsers(const HttpRequestPtr &request, std::function<void(const HttpResponsePtr &)> &&callback)
 {
-    LOG_INFO << "UserController::searchUsers in";
-
     try
     {
-        if (!isAdmin(request))
+        if (!srvPtr_->isAdmin(request))
         {
             throw BusinessException(ErrorCode::PARAMS_ERROR(), "非管理员用户，无查询权限");
         }
@@ -126,8 +128,6 @@ void UserController::searchUsers(const HttpRequestPtr &request, std::function<vo
 
 void UserController::getCurrentUser(const HttpRequestPtr &request, std::function<void(const HttpResponsePtr &)> &&callback)
 {
-    LOG_INFO << "UserController::getCurrentUser in";
-
     try
     {
         bool isFind = request->getSession()->find(USER_LOGIN_STATE);
@@ -151,11 +151,9 @@ void UserController::getCurrentUser(const HttpRequestPtr &request, std::function
 
 void UserController::deleteUsers(const HttpRequestPtr &request, std::function<void(const HttpResponsePtr &)> &&callback, User &&reqUser)
 {
-    LOG_INFO << "UserController::deleteUsers in";
-
     try
     {
-        if (!isAdmin(request))
+        if (!srvPtr_->isAdmin(request))
         {
             throw BusinessException(ErrorCode::PARAMS_ERROR(), "非管理员用户，无删除权限");
         }
@@ -176,22 +174,4 @@ void UserController::deleteUsers(const HttpRequestPtr &request, std::function<vo
 
         callErrorResponse(std::move(callback), e);
     }
-}
-
-bool UserController::isAdmin(const HttpRequestPtr &request)
-{
-    LOG_INFO << "UserController::isAdmin in";
-
-    bool isFind = request->getSession()->find(USER_LOGIN_STATE);
-
-    if (isFind)
-    {
-        User user = request->getSession()->get<User>(USER_LOGIN_STATE);
-        if (user.getValueOfUserrole() == ADMIN_ROLE)
-        {
-            return true;
-        }
-    }
-
-    return false;
 }

@@ -5,6 +5,7 @@
  */
 
 #include "LoginFilter.h"
+#include <common/HttpResponseUtils.h>
 
 using namespace drogon;
 
@@ -13,14 +14,19 @@ void LoginFilter::doFilter(const HttpRequestPtr &req,
                          FilterChainCallback &&fccb)
 {
     //Edit your logic here
-    if (1)
-    {
+    try{
+        //Check failed
+        if (!srvPtr_->isAdmin(req))
+        {
+            throw BusinessException(ErrorCode::PARAMS_ERROR(), "LoginFilter::非管理员用户，无查询权限");
+        }
+
         //Passed
         fccb();
         return;
     }
-    //Check failed
-    auto res = drogon::HttpResponse::newHttpResponse();
-    res->setStatusCode(k500InternalServerError);
-    fcb(res);
+    catch (BusinessException &e)
+    {
+        callErrorResponse(std::move(fcb), e);
+    }
 }

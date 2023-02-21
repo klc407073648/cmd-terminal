@@ -13,7 +13,7 @@ using namespace drogon;
 // UserService 纯虚函数，接口类
 namespace cmdterminal
 {
-  static std::string S_PLANET_CODE = "10000";
+  //static std::string S_PLANET_CODE = "10000";
 
   class UserService;
   using UserServicePtr = std::shared_ptr<UserService>;
@@ -30,7 +30,7 @@ namespace cmdterminal
      * @param planetCode    星球编号
      * @return 新用户 id
      */
-    virtual long userRegister(const std::string &userAccount, const std::string &userPassword, const std::string &checkPassword, const std::string &planetCode=S_PLANET_CODE) = 0;
+    virtual long userRegister(const std::string &userAccount, const std::string &userPassword, const std::string &checkPassword, const std::string &planetCode="10000") = 0;
 
     /**
      * @brief 用户登陆
@@ -81,6 +81,14 @@ namespace cmdterminal
      * @return 用户列表
      */
     virtual std::vector<User> searchUsersByTags(std::vector<std::string> tagNameList) = 0;
+
+    /**
+     * @brief 是否Admin用户
+     * 
+     * @param request  原始请求
+     * @return 是否Admin用户
+     */
+    virtual bool isAdmin(const HttpRequestPtr &request) = 0;
 
   };
 }

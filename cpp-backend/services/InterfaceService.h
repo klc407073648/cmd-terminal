@@ -2,6 +2,7 @@
 #define __INTERFACE_SERVICE_H__
 
 #include <string>
+#include <memory>
 
 // InterfaceService 纯虚函数，接口类
 namespace cmdterminal
