@@ -3,6 +3,9 @@
 
 #include <string>
 #include <memory>
+#include <drogon/drogon.h>
+
+using namespace drogon;
 
 // InterfaceService 纯虚函数，接口类
 namespace cmdterminal
@@ -25,7 +28,7 @@ namespace cmdterminal
      * @brief 获取翻译结果
      *
      */
-    virtual std::string getTranslate() = 0;
+    virtual std::string getTranslate(const HttpRequestPtr &request) = 0;
   };
 }
 

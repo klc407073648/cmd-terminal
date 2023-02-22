@@ -33,7 +33,7 @@ void InterfaceController::getTranslate(const HttpRequestPtr &request, std::funct
 {
     try
     {
-        std::string translalteRes = srvPtr_->getTranslate();
+        std::string translalteRes = srvPtr_->getTranslate(request);
 
         callNormalResponse(std::move(callback),translalteRes);
     }
