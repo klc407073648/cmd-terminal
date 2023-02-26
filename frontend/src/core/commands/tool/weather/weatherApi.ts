@@ -6,20 +6,20 @@ import myAxios from "../../../../plugins/myAxios";
  * @param config
  */
 export const getCurrentWeather = async (
-  cityname: string
+  city: string
 ) => {
-  if (!cityname) {
+  if (!city) {
     return null;
   }
-  return await myAxios.post("/weather/now", { cityname });
+  return await myAxios.post("/weather/now", { city });
 };
 
 export const getFutureWeather = async (
-    cityname: string,
+    city: string,
     days: string
 ) => {
-  if (!cityname) {
+  if (!city) {
     return null;
   }
-  return await myAxios.post("/weather/future", { cityname,days });
+  return await myAxios.post("/weather/future", { city,days });
 };

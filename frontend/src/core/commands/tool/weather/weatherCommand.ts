@@ -1,15 +1,8 @@
 import {CommandType} from "../../../command";
 import {getCurrentWeather, getFutureWeather} from "./weatherApi";
+import {defineAsyncComponent} from "vue";
+import ComponentOutputType = CmdTerminal.ComponentOutputType;
 
-
-/**
- * 用户类型
- */
-interface weatherResultType {
-    from: string;
-    to: string;
-    trans_result: Array<Array<string>>;
-}
 
 /**
  * 翻译命令
@@ -21,7 +14,7 @@ const weatherCommand: CommandType = {
         alias: [],
         params: [
             {
-                key: "cityname",
+                key: "city",
                 desc: "城市名称",
                 required: true,
             },
@@ -48,33 +41,43 @@ const weatherCommand: CommandType = {
                 terminal.writeTextErrorResult("参数不足");
                 return;
             }
-            const cityname = _.join(" ");
+            const city = _.join(" ");
+            var weather;
+            var weatherInfo;
 
-            //未来天气
             if (!future) {
-                const res = await getFutureWeather(cityname, future).catch((err) => {
+                //未来天气
+                weather = await getFutureWeather(city, future).catch((err) => {
                     terminal.writeTextErrorResult(err?.name + ":" + err?.message);
                 });
-                // 请求成功
-                //调整
-                if (res?.code !== 0) {
-                    terminal.writeTextErrorResult(res?.message + ":" + res?.description);
-                } else {
-                    terminal.writeTextSuccessResult("未来天气");
-                }
+
+                weatherInfo = (JSON.parse(weather?.data))?.forecasts
+            }
+            else{
+                //当天天气
+                weather = await getCurrentWeather(city).catch((err) => {
+                    terminal.writeTextErrorResult(err?.name + ":" + err?.message);
+                });
+                weatherInfo = (JSON.parse(weather?.data))?.lives
             }
 
-            //当天天气
-            const res = await getCurrentWeather(cityname).catch((err) => {
-                terminal.writeTextErrorResult(err?.name + ":" + err?.message);
-            });
             // 请求成功
             //调整
-            if (res?.code !== 0) {
-                terminal.writeTextErrorResult(res?.message + ":" + res?.description);
-            } else {
-                terminal.writeTextSuccessResult("当前天气");
+            if (weather?.code !== 0) {
+                terminal.writeTextErrorResult(weather?.message + ":" + weather?.description);
+                return;
             }
+
+            console.log(weatherInfo)
+
+            const output: ComponentOutputType = {
+                type: "component",
+                component: defineAsyncComponent(() => import("./WeatherBox.vue")),
+                props: {
+                    weatherInfo,
+                },
+            };
+            terminal.writeResult(output);
         }
     };
 

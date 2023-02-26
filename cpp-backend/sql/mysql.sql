@@ -40,19 +40,19 @@ create table if not exists cmdterminal.`interface`
     `isDelete`           tinyint default 0                    not null comment   '是否删除(0-未删, 1-已删)'
 ) ENGINE = InnoDB COMMENT = '接口信息' character set = utf8;
 
-INSERT INTO `interface` VALUES (1, 'getBackground', 'getBackground', 'https://api.btstu.cn/sjbz/api.php?lx=dongman&format=json', NULL, NULL, '', 0, 'Get', '2023-2-16 14:47:16', '2023-2-16 14:47:16', 0);
-
-
-create table if not exists cmdterminal.`operation_log`
+create table if not exists cmdterminal.`log`
 (
     `id`                 bigint                               not null auto_increment comment '主键' primary key,
-    `name`               varchar(256)                         not null comment '操作命令名称',
+    `userid`             bigint                               not null,
+    `content`            varchar(1024)                        not null comment '执行内容',
+    `type`               int default 0                        not null comment '日志类型（0-操作日志，1-运行日志）',
     `createTime`         datetime default CURRENT_TIMESTAMP   not null comment '创建时间',
     `updateTime`         datetime default CURRENT_TIMESTAMP   not null on update CURRENT_TIMESTAMP comment '更新时间',
-    `isDelete`           tinyint default 0                    not null comment   '是否删除(0-未删, 1-已删)'
-) ENGINE = InnoDB COMMENT = '接口信息' character set = utf8;
+    `isDelete`           tinyint default 0                    not null comment   '是否删除(0-未删, 1-已删)',
+    CONSTRAINT fk_user_log_id FOREIGN KEY(userid) REFERENCES user(id) 
+) ENGINE = InnoDB COMMENT = '日志表' character set = utf8;
 
---- 接口信息
+--- 日志表
 
 
 
