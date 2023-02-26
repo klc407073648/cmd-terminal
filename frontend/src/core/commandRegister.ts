@@ -6,6 +6,7 @@ import relaxSet from "./cmdsets/relaxSet";
 import toolSet from "./cmdsets/toolSet";
 import terminalSet from "./cmdsets/terminalSet";
 import setinfoCommand from "./commands/z-endcmd/setinfoCommand";
+import logSet from "./cmdsets/logSet";
 
 /**
  * 命令列表（数组元素顺序会影响 help 命令的展示顺序）
@@ -17,6 +18,7 @@ const commandList: CommandType[] = [
   ...Object.values(spaceSet),//空间功能
   ...Object.values(toolSet),//工具功能
   ...Object.values(terminalSet),//终端功能
+  ...Object.values(logSet),//终端功能
     setinfoCommand,//命令集查询命令单独注册
 ];
 

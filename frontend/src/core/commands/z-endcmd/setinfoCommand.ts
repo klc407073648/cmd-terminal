@@ -15,6 +15,8 @@ import spaceSet from "../../cmdsets/spaceSet";
 import toolSet from "../../cmdsets/toolSet";
 import searchSet from "../../cmdsets/searchSet";
 import {stringify} from "querystring";
+import {isAdmin,NO_AUTH_EXEC_CMD} from "../manage/user/userCommon";
+import logSet from "../../cmdsets/logSet";
 
 /**
  * 命令全集 (确保其他命令集先于setinfo命令初始化，创建z-endcmd目录，滞后setinfo命令注册)
@@ -27,6 +29,7 @@ const fullCmdSet: Record<string, Record<string, CommandType>> = {
   space: spaceSet,
   terminal: terminalSet,
   tool: toolSet,
+  log: logSet,
 };
 
 /**
@@ -42,15 +45,18 @@ const setinfoCommand: CommandType = {
   ],
   options: [],
   action(options, terminal): void {
+
+    if(!isAdmin()){
+      terminal.writeTextErrorResult(NO_AUTH_EXEC_CMD);
+      return;
+    }
+
     const { _, self } = options;
     const word = _.length > 0 ? _[0] : "";
     if(word == ""){
       terminal.writeTextErrorResult("查询命令集必须输入：" + Object.keys(fullCmdSet));
     }
-    console.log(word)
-    console.log(fullCmdSet)
     var curCmdSet = fullCmdSet[word];
-    console.log(curCmdSet)
     const output: ComponentOutputType = {
       type: "component",
       component: defineAsyncComponent(() => import("./SetInfoBox.vue")),

@@ -7,19 +7,21 @@ import cdCommand from "../commands/space/cdCommand";
 import moveCommand from "../commands/space/moveCommand";
 import copyCommand from "../commands/space/copyCommand";
 import {CommandType} from "../command";
+import gotoCommand from "../commands/space/gotoCommand";
 
 /**
  *  空间命令集
  */
 const spaceSet: Record<string, CommandType> = {
-  list: listCommand,
-  remove: removeCommand,
-  add: addCommand,
   mkdir: mkdirCommand,
-  pwd: pwdCommand,
   cd: cdCommand,
+  add: addCommand,
+  remove: removeCommand,
   move: moveCommand,
   copy: copyCommand,
+  list: listCommand,
+  pwd: pwdCommand,
+  goto: gotoCommand,
 };
 
 /**

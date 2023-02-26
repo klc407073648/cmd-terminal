@@ -1,5 +1,5 @@
 import { CommandType } from "../../../command";
-import { useTerminalConfigStore } from "./terminalConfigStore";
+import { useTerminalConfigStore } from "../config/terminalConfigStore";
 
 /**
  * 重置配置

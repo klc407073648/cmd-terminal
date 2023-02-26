@@ -1,4 +1,4 @@
-import { CommandType } from "../../command";
+import { CommandType } from "../../../command";
 
 /**
  * 清屏命令

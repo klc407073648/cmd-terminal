@@ -1,11 +1,12 @@
 import { CommandType } from "../../command";
-import { useSpaceStore } from "../space/spaceStore";
+import { useSpaceStore } from "./spaceStore";
+import copyCommand from "./copyCommand";
 
 /**
  * 跳转命令
  * @author klc
  */
-export default {
+const gotoCommand: CommandType = {
   func: "goto",
   name: "网页跳转",
   alias: ["to", "open", "visit", "jump"],
@@ -47,4 +48,6 @@ export default {
       window.open(link);
     }
   },
-} as CommandType;
+};
+
+export default gotoCommand;

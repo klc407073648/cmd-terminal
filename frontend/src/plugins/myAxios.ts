@@ -2,11 +2,8 @@ import axios from "axios";
 
 // 自定义 axios 实例
 const myAxios = axios.create({
-  baseURL:
-    // @ts-ignore
-    process.env.NODE_ENV === "production"
-      ? "https://PROD_ADDRESS:7345/api"
-      : "http://localhost:7345/api",
+  baseURL:"/api",
+  timeout: 3000
 });
 
 myAxios.defaults.withCredentials = true;
@@ -19,7 +16,7 @@ myAxios.interceptors.request.use(
   },
   function (error) {
     // 对请求错误做些什么
-      console.log("添加请求拦截器error:"+error)
+    console.log("添加请求拦截器error:"+error)
     return Promise.reject(error);
   }
 );
@@ -28,13 +25,14 @@ myAxios.interceptors.request.use(
 myAxios.interceptors.response.use(
   function (response) {
     console.log(response);
+    //请求成功，无论是错误响应还是正确响应直接返回，由调用处理提示错误信息
     // 对响应数据做点什么
     return response.data;
   },
   function (error) {
     // 对响应错误做点什么
-      //alert(error) //统一弹框处理
-      console.log("响应拦截器error:"+error)
+    //alert(error) //统一弹框处理
+    console.log("响应拦截器error:"+error)
     return Promise.reject(error);
   }
 );

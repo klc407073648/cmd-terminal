@@ -7,6 +7,8 @@ import githubCommand from "./githubCommand";
 import googleCommand from "./googleCommand";
 import zhihuCommand from "./zhihuCommand";
 import useCommandOptionType from "../../../constants/CommandOptionType";
+import doubanCommand from "./doubanCommand";
+import csdnCommand from "./csdnCommand";
 
 const { searchContext,isOpenCur} = useCommandOptionType()
 
@@ -21,6 +23,8 @@ const fromdict: Record<string, CommandType> = {
   github: githubCommand,
   google: googleCommand,
   zhihu: zhihuCommand,
+  douban:doubanCommand,
+  csdn:csdnCommand
 };
 
 /**
@@ -43,11 +47,23 @@ const searchCommand: CommandType = {
       type: "string",
       defaultValue: "baidu",
     },
-    isOpenCur
+    isOpenCur,
+    {
+      key: "item",
+      desc: "显示搜索源",
+      alias: ["i"],
+      type: "boolean",
+      defaultValue: false,
+    },
   ],
   // 默认使用百度搜索
   action: (options, terminal) => {
-    const { from = "baidu" } = options;
+    const { from = "baidu",self,item } = options;
+    console.log("from:",from,self,item)
+    if(item){
+      terminal.writeTextSuccessResult("搜索源:" + Object.keys(fromdict).toString());
+      return
+    }
     // 执行不同搜索源的搜索方法
     const fromObj = fromdict[from];
     if (!fromObj) {
@@ -58,4 +74,4 @@ const searchCommand: CommandType = {
   },
 };
 
-export default [searchCommand, ...Object.values(fromdict)];
+export default searchCommand;

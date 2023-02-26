@@ -5,6 +5,7 @@ import  stibelCommand from "../commands/relax/read/stibelCommand"
 import  coolshellCommand from "../commands/relax/read/coolshellCommand"
 import  pdaiCommand from "../commands/relax/read/pdaiCommand"
 import {CommandType} from "../command";
+import blogCommand from "../commands/relax/read/blog/blogCommand";
 
 
 /**
@@ -15,8 +16,9 @@ const relaxSet: Record<string, CommandType> = {
     hot: hotCommand,
     music: musicCommand,
     stibel: stibelCommand,
-    coolshell: coolshellCommand,
     pdai: pdaiCommand,
+    coolshell: coolshellCommand,
+    blog:blogCommand
 };
 
 export default relaxSet;

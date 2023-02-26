@@ -42,3 +42,4 @@ export const userRegister = async (
 export const getLoginUser = async () => {
   return await myAxios.get("/user/current");
 };
+
