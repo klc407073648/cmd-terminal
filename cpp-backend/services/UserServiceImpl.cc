@@ -102,13 +102,13 @@ long UserServiceImpl::userRegister(const std::string &userAccount, const std::st
         user.setUserpassword(encryptPassword);
         user.setPlanetcode(planetCode);
         userMapper.insert(user);
+		
+		return *(user.getId());
     }
     catch (const DrogonDbException &e)
     {
-        throw BusinessException(ErrorCode::PARAMS_ERROR(), funName + "执行失败");
+        throw BusinessException(ErrorCode::PARAMS_ERROR(),  "插入数据失败");
     }
-
-    return *(user.getId());
 }
 User UserServiceImpl::userLogin(const std::string &userAccount, const std::string &userPassword, const HttpRequestPtr &request)
 {

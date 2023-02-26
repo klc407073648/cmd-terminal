@@ -18,6 +18,9 @@ namespace cmdterminal
 
     std::string getBackground() override;
     std::string getTranslate(const HttpRequestPtr &request) override;
+    std::string getBackendVersion() override;
+    std::string getCurrentWeather(const HttpRequestPtr &request) override;
+    std::string getFutureWeather(const HttpRequestPtr &request) override;
 
   private:
   /**

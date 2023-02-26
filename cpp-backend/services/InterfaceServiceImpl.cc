@@ -120,6 +120,7 @@ std::string InterfaceServiceImpl::syncSendRequest(const HttpRequestPtr &req, con
     return res;
 }
 
+
 std::string InterfaceServiceImpl::getBackground()
 {
     std::string funName = __FUNCTION__;
@@ -133,6 +134,7 @@ std::string InterfaceServiceImpl::getBackground()
         // 从数据库里读取url,requestParams,method
         std::string url = interface.getValueOfUrl();
         std::string requestParams = interface.getValueOfRequestparams();
+
         std::string method = interface.getValueOfMethod();
 
         std::string host("");
@@ -179,19 +181,28 @@ std::string InterfaceServiceImpl::getTranslate(const HttpRequestPtr &request)
         std::string requestParams = interface.getValueOfRequestparams();
         std::string method = interface.getValueOfMethod();
 
+        std::string appid("");
+        std::string key("");
+
+        Json::Reader reader;
+        Json::Value value;
+        if (reader.parse(requestParams, value))
+        {
+            appid = value["appid"].asString();
+            key = value["key"].asString(); // 需要加密存储在数据库
+        }
+
         std::string host("");
         std::string path("");
         getHostAndPathFromUrl(url, host, path);
 
         auto client = HttpClient::newHttpClient(host);
-        std::string key = "oBb8QjQvxqywMug9TJl5"; // 需要加密存储在数据库
 
         // 百度云翻译api方法
         auto json = *(request->getJsonObject());
         std::string keywords = json.isMember("keywords") ? json["keywords"].asString() : "";
         std::string from = json.isMember("config") ? ((json["config"]).isMember("from") ? json["config"]["from"].asString() : "") : "";
         std::string to = json.isMember("config") ? ((json["config"]).isMember("to") ? json["config"]["to"].asString() : "") : "";
-        std::string appid = "20230217001565627";
         std::string salt = std::to_string(trantor::Date::now().microSecondsSinceEpoch()).substr(0, 10); // 随机数
         std::string sign = utils::getMd5(appid + keywords + salt + key);
         toLower(sign);
@@ -207,15 +218,6 @@ std::string InterfaceServiceImpl::getTranslate(const HttpRequestPtr &request)
         req->setParameter("sign", sign);   // 要转小写才行
 
         translateRes = syncSendRequest(req, client);
-
-		/*
-        Json::Reader reader;
-        Json::Value value;
-        if (reader.parse(respBody, value))
-        {
-            translateRes = value["trans_result"]["dst"].asString();
-        }
-		*/
     }
     catch (const DrogonDbException &e)
     {
@@ -223,4 +225,113 @@ std::string InterfaceServiceImpl::getTranslate(const HttpRequestPtr &request)
     }
 
     return translateRes;
+}
+
+std::string InterfaceServiceImpl::getBackendVersion()
+{
+    std::string funName = __FUNCTION__;
+    std::string version("");
+    try
+    {
+        auto interface = InterfaceMapper.findOne(Criteria(Interface::Cols::_name, CompareOperator::EQ, funName) &&
+                                                 Criteria(Interface::Cols::_status, CompareOperator::EQ, "0") &&
+                                                 Criteria(Interface::Cols::_isDelete, CompareOperator::EQ, "0"));
+
+        // 从数据库里读取url,requestParams,method
+        version = "drogon:V1.1.0";
+    }
+    catch (const DrogonDbException &e)
+    {
+        throw BusinessException(ErrorCode::PARAMS_ERROR(), funName + "接口不存在");
+    }
+
+    return version;
+}
+
+std::string InterfaceServiceImpl::getCurrentWeather(const HttpRequestPtr &request)
+{
+    std::string funName = __FUNCTION__;
+    std::string weatherInfo("");
+    try
+    {
+        auto interface = InterfaceMapper.findOne(Criteria(Interface::Cols::_name, CompareOperator::EQ, funName) &&
+                                                 Criteria(Interface::Cols::_status, CompareOperator::EQ, "0") &&
+                                                 Criteria(Interface::Cols::_isDelete, CompareOperator::EQ, "0"));
+
+        // 从数据库里读取url,requestParams,method
+        std::string url = interface.getValueOfUrl();
+        std::string requestParams = interface.getValueOfRequestparams();
+        std::string method = interface.getValueOfMethod();
+
+        std::string host("");
+        std::string path("");
+        getHostAndPathFromUrl(url, host, path);
+
+        auto client = HttpClient::newHttpClient(host);
+        auto req = HttpRequest::newHttpRequest();
+        req->setMethod(httpMethodMap[method]);
+        req->setPath(path);
+
+        setHttpRequestParam(req, requestParams); // key
+        auto json = *(request->getJsonObject());
+        std::string city = json.isMember("city") ? json["city"].asString() : "";
+
+        // 高德天气API
+        // req->setParameter("key", key);  // 请求服务权限标识
+        req->setParameter("city", city); // 城市编码
+        // req->setParameter("extensions", to); //气象类型 base:返回实况天气,all:返回预报天气
+        // req->setParameter("output", "JSON");      //返回格式:可选值：JSON,XML ,默认JSON
+
+        weatherInfo = syncSendRequest(req, client);
+    }
+    catch (const DrogonDbException &e)
+    {
+        throw BusinessException(ErrorCode::PARAMS_ERROR(), funName + "接口不存在");
+    }
+
+    return weatherInfo;
+}
+
+std::string InterfaceServiceImpl::getFutureWeather(const HttpRequestPtr &request)
+{
+    std::string funName = __FUNCTION__;
+    std::string weatherInfo("");
+    try
+    {
+        auto interface = InterfaceMapper.findOne(Criteria(Interface::Cols::_name, CompareOperator::EQ, funName) &&
+                                                 Criteria(Interface::Cols::_status, CompareOperator::EQ, "0") &&
+                                                 Criteria(Interface::Cols::_isDelete, CompareOperator::EQ, "0"));
+
+        // 从数据库里读取url,requestParams,method
+        std::string url = interface.getValueOfUrl();
+        std::string requestParams = interface.getValueOfRequestparams();
+        std::string method = interface.getValueOfMethod();
+
+        std::string host("");
+        std::string path("");
+        getHostAndPathFromUrl(url, host, path);
+
+        auto client = HttpClient::newHttpClient(host);
+        auto req = HttpRequest::newHttpRequest();
+        req->setMethod(httpMethodMap[method]);
+        req->setPath(path);
+
+        setHttpRequestParam(req, requestParams); // key
+        auto json = *(request->getJsonObject());
+        std::string city = json.isMember("city") ? json["city"].asString() : "";
+
+        // 高德天气API
+        // req->setParameter("key", key);  // 请求服务权限标识
+        req->setParameter("city", city);        // 城市编码
+        req->setParameter("extensions", "all"); // 气象类型 base:返回实况天气,all:返回预报天气
+        // req->setParameter("output", "JSON");      //返回格式:可选值：JSON,XML ,默认JSON
+
+        weatherInfo = syncSendRequest(req, client);
+    }
+    catch (const DrogonDbException &e)
+    {
+        throw BusinessException(ErrorCode::PARAMS_ERROR(), funName + "接口不存在");
+    }
+
+    return weatherInfo;
 }

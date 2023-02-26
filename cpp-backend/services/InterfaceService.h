@@ -29,6 +29,24 @@ namespace cmdterminal
      *
      */
     virtual std::string getTranslate(const HttpRequestPtr &request) = 0;
+
+    /**
+     * @brief 获取后台版本信息
+     *
+     */
+    virtual std::string getBackendVersion() = 0;
+
+    /**
+     * @brief 获取当前天气
+     *
+     */
+    virtual std::string getCurrentWeather(const HttpRequestPtr &request) = 0;
+
+    /**
+     * @brief 获取未来天气
+     *
+     */
+    virtual std::string getFutureWeather(const HttpRequestPtr &request) = 0;
   };
 }
 
