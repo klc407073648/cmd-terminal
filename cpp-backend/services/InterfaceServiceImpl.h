@@ -43,7 +43,7 @@ namespace cmdterminal
      * @param keyword 
      * @return std::string 
      */
-    std::string syncSendRequest(const HttpRequestPtr &req, const HttpClientPtr &client, const std::string &keyword);
+    std::string syncSendRequest(const HttpRequestPtr &req, const HttpClientPtr &client, const std::string &keyword="");
     void initHttpMethodMap();
     void toLower(std::string &str);
 

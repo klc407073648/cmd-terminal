@@ -206,7 +206,16 @@ std::string InterfaceServiceImpl::getTranslate(const HttpRequestPtr &request)
         req->setParameter("salt", salt);   // appid+q+salt+密钥 的MD5值
         req->setParameter("sign", sign);   // 要转小写才行
 
-        translateRes = syncSendRequest(req, client, "");
+        translateRes = syncSendRequest(req, client);
+
+		/*
+        Json::Reader reader;
+        Json::Value value;
+        if (reader.parse(respBody, value))
+        {
+            translateRes = value["trans_result"]["dst"].asString();
+        }
+		*/
     }
     catch (const DrogonDbException &e)
     {

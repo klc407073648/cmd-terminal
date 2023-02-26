@@ -35,77 +35,77 @@ long UserServiceImpl::userRegister(const std::string &userAccount, const std::st
     5. 账户不包含特殊字符
     6. 密码和校验密码相同
     */
-    
-    if (userAccount.size() == 0 || userPassword.size() == 0 || checkPassword.size() == 0 || checkPassword.size() == 0)
+
+    try
     {
-        throw BusinessException(ErrorCode::PARAMS_ERROR(), "参数为空");
+        if (userAccount.size() == 0 || userPassword.size() == 0 || checkPassword.size() == 0 || checkPassword.size() == 0)
+        {
+            throw BusinessException(ErrorCode::PARAMS_ERROR(), "参数为空");
+        }
+
+        if (userAccount.length() < 4)
+        {
+            throw BusinessException(ErrorCode::PARAMS_ERROR(), "用户账号小于4位");
+        }
+
+        if (userPassword.length() < 8 || checkPassword.length() < 8)
+        {
+            throw BusinessException(ErrorCode::PARAMS_ERROR(), "用户密码和校验密码小于8位");
+        }
+
+        if (planetCode.length() > 5)
+        {
+            throw BusinessException(ErrorCode::PARAMS_ERROR(), "星球编号大于5位");
+        }
+
+        // 特殊字符校验
+        if (checkSpecialCharacter(userAccount))
+        {
+            throw BusinessException(ErrorCode::PARAMS_ERROR(), "用户账号中存在特殊字符");
+        }
+
+        // 密码和校验密码相同
+        if (userPassword != checkPassword)
+        {
+            throw BusinessException(ErrorCode::PARAMS_ERROR(), "用户密码和校验密码不同");
+        }
+
+        // 用户不能重复
+        auto ret = userMapper.findBy(Criteria(User::Cols::_userAccount, CompareOperator::EQ, userAccount));
+
+        LOG_INFO << "ret.size():" << ret.size();
+
+        if (!ret.empty())
+        {
+            throw BusinessException(ErrorCode::PARAMS_ERROR(), "用户账号已存在");
+        }
+
+        // 星球账号不能重复
+        /*
+        ret = userMapper.findBy(Criteria(User::Cols::_planetCode, CompareOperator::EQ, planetCode));
+        if (!ret.empty())
+        {
+            throw BusinessException(ErrorCode::PARAMS_ERROR(), "星球账号已存在");
+        }
+        */
+
+        // 2.加密
+        std::string encryptPassword = encryptPwd(userPassword);
+        LOG_INFO << "encryptPassword:" << encryptPassword;
+
+        // 3.插入数据
+        User user;
+        user.setIphone("");
+        user.setEmail("");
+        user.setUserstatus(0);
+        user.setUseraccount(userAccount);
+        user.setUserpassword(encryptPassword);
+        user.setPlanetcode(planetCode);
+        userMapper.insert(user);
     }
-
-    if (userAccount.length() < 4)
+    catch (const DrogonDbException &e)
     {
-        throw BusinessException(ErrorCode::PARAMS_ERROR(), "用户账号小于4位");
-    }
-
-    if (userPassword.length() < 8 || checkPassword.length() < 8)
-    {
-        throw BusinessException(ErrorCode::PARAMS_ERROR(), "用户密码和校验密码小于8位");
-    }
-
-    if (planetCode.length() > 5)
-    {
-        throw BusinessException(ErrorCode::PARAMS_ERROR(), "星球编号大于5位");
-    }
-
-    //特殊字符校验
-    if (checkSpecialCharacter(userAccount))
-    {
-        throw BusinessException(ErrorCode::PARAMS_ERROR(), "用户账号中存在特殊字符");
-    }
-
-    //密码和校验密码相同
-    if (userPassword != checkPassword)
-    {
-        throw BusinessException(ErrorCode::PARAMS_ERROR(), "用户密码和校验密码不同");
-    }
-
-    //用户不能重复
-    auto ret = userMapper.findBy(Criteria(User::Cols::_userAccount, CompareOperator::EQ, userAccount));
-
-    LOG_INFO << "ret.size():" << ret.size();
-
-    if (!ret.empty())
-    {
-        throw BusinessException(ErrorCode::PARAMS_ERROR(), "用户账号已存在");
-    }
-
-    //星球账号不能重复
-    /*
-    ret = userMapper.findBy(Criteria(User::Cols::_planetCode, CompareOperator::EQ, planetCode));
-    if (!ret.empty())
-    {
-        throw BusinessException(ErrorCode::PARAMS_ERROR(), "星球账号已存在");
-    }
-    */
-
-    // 2.加密
-    std::string encryptPassword = encryptPwd(userPassword);
-    LOG_INFO << "encryptPassword:" << encryptPassword;
-
-    // 3.插入数据
-    User user;
-    user.setIphone("");
-    user.setEmail("");
-    user.setUserstatus(0);
-    user.setUseraccount(userAccount);
-    user.setUserpassword(encryptPassword);
-    user.setPlanetcode(planetCode);
-    // bool res = userMapper.save(user);
-    userMapper.insert(user);
-
-    ret = userMapper.findBy(Criteria(User::Cols::_userAccount, CompareOperator::EQ, userAccount));
-    if (ret.size() != 1)
-    {
-        throw BusinessException(ErrorCode::PARAMS_ERROR(), "插入数据失败");
+        throw BusinessException(ErrorCode::PARAMS_ERROR(), funName + "执行失败");
     }
 
     return *(user.getId());
@@ -131,7 +131,7 @@ User UserServiceImpl::userLogin(const std::string &userAccount, const std::strin
         throw BusinessException(ErrorCode::PARAMS_ERROR(), "用户密码小于8位");
     }
 
-    //特殊字符校验
+    // 特殊字符校验
     if (checkSpecialCharacter(userAccount))
     {
         throw BusinessException(ErrorCode::PARAMS_ERROR(), "用户账号中存在特殊字符");
@@ -141,7 +141,7 @@ User UserServiceImpl::userLogin(const std::string &userAccount, const std::strin
     std::string encryptPassword = encryptPwd(userPassword);
     LOG_INFO << "encryptPassword:" << encryptPassword;
 
-    //查询用户是否存在
+    // 查询用户是否存在
     try
     {
         auto user = userMapper.findOne(Criteria(User::Cols::_userAccount, CompareOperator::EQ, userAccount) &&
@@ -164,14 +164,15 @@ User UserServiceImpl::userLogin(const std::string &userAccount, const std::strin
 std::vector<User> UserServiceImpl::userSearch(const std::string &username)
 {
     std::vector<User> userList;
-	
-	if(username==""){
-		userList = userMapper.findAll();
-	}
+
+    if (username == "")
+    {
+        userList = userMapper.findAll();
+    }
     else
-	{
-		userList = userMapper.findBy(Criteria(User::Cols::_username, CompareOperator::EQ, username));
-	}
+    {
+        userList = userMapper.findBy(Criteria(User::Cols::_username, CompareOperator::EQ, username));
+    }
     std::vector<User> safetyUserList;
 
     for (auto user : userList)
@@ -183,19 +184,21 @@ std::vector<User> UserServiceImpl::userSearch(const std::string &username)
 
 User UserServiceImpl::userCurrent(long id)
 {
+    User safetyUser;
+
     try
     {
         auto user = userMapper.findOne(Criteria(User::Cols::_id, CompareOperator::EQ, id));
 
         // 3. 用户脱密
-        User safetyUser = getSafetyUser(user);
-
-        return safetyUser;
+        safetyUser = getSafetyUser(user);
     }
     catch (const DrogonDbException &e)
     {
         throw BusinessException(ErrorCode::PARAMS_ERROR(), "获取当前用户失败");
     }
+
+    return safetyUser;
 }
 
 bool UserServiceImpl::userDelete(long id)
@@ -244,7 +247,7 @@ User UserServiceImpl::getSafetyUser(User originUser)
 
 bool UserServiceImpl::checkSpecialCharacter(const std::string &str)
 {
-    //特殊字符校验
+    // 特殊字符校验
     std::regex vaildPattern("[~!/@#$%^&*()\\-_=+\\|\\[{}\\];:\'\",<.>/?]+");
     std::smatch match;
 
