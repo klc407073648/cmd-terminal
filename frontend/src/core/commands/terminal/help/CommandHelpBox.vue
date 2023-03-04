@@ -6,6 +6,14 @@
       别名：{{ command.alias.join(", ") }}
     </div>
     <div>用法：{{ usageStr }}</div>
+    <div v-if="command.helpDetails">
+      帮助：
+      <ul style="margin-bottom: 0">
+          <li v-for="(_, index) in command.helpDetails"  :key="index">
+              {{ command.helpDetails[index] }}
+          </li>
+      </ul>
+    </div>
     <template
       v-if="command.subCommands && Object.keys(command.subCommands).length > 0"
     >

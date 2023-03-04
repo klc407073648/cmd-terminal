@@ -31,6 +31,8 @@ interface CommandType {
   ) => void;
   // 结果是否允许折叠
   collapsible?: boolean;
+  //帮助详情
+  helpDetails?: string[];
 }
 
 /**

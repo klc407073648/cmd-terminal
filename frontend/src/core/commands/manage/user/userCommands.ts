@@ -21,6 +21,9 @@ const userCommand: CommandType = {
       required: true,
     },
   ],
+  helpDetails: ["注册用户：user register -u testadmin -p 12345678 -c 12345678",
+      "登录用户：user login -u testadmin -p 12345678 ",
+      "注销用户：user logout"],
   subCommands: {
     login: loginCommand,
     register: registerCommand,

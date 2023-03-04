@@ -1,5 +1,7 @@
 import { CommandType } from "../../../command";
-import isOpenCur from "../../../../constants/CommandOptionType";
+import useCommandOptionType from "../../../../constants/CommandOptionType";
+
+const { searchContext,isOpenCur} = useCommandOptionType()
 
 /**
  * 百度搜索命令

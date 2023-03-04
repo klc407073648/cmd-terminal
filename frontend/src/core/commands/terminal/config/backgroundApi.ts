@@ -5,7 +5,7 @@ import myAxios from "../../../../plugins/myAxios";
  * @param keywords
  * @param config
  */
-export const getRandomBackground = async () => {
-  return await myAxios.post("/background/get/random");
+export const getRandomBackground = async (lx:string) => {
+  return await myAxios.post("/background/get/random",{lx});
 };
 
