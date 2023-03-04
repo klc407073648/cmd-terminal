@@ -22,7 +22,7 @@ namespace cmdterminal
      * @brief 获取随机背景地址
      *
      */
-    virtual std::string getBackground() = 0;
+    virtual std::string getBackground(const std::string& lx) = 0;
 
     /**
      * @brief 获取翻译结果

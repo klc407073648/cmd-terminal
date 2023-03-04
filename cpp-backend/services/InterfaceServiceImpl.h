@@ -16,7 +16,7 @@ namespace cmdterminal
     InterfaceServiceImpl();
     ~InterfaceServiceImpl();
 
-    std::string getBackground() override;
+    std::string getBackground(const std::string& lx) override;
     std::string getTranslate(const HttpRequestPtr &request) override;
     std::string getBackendVersion() override;
     std::string getCurrentWeather(const HttpRequestPtr &request) override;

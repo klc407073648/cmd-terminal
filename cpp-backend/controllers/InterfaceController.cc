@@ -19,7 +19,8 @@ void InterfaceController::getBackground(const HttpRequestPtr &request, std::func
 {
     try
     {
-        std::string url = srvPtr_->getBackground();
+        std::string lx = ((*(request->getJsonObject()))["lx"]).asString();
+        std::string url = srvPtr_->getBackground(lx);
         callNormalResponse(std::move(callback), url);
     }
     catch (BusinessException &e)

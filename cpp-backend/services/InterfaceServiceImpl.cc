@@ -2,6 +2,7 @@
 #include <drogon/utils/Utilities.h>
 #include <trantor/utils/Utilities.h>
 #include <trantor/utils/Date.h>
+#include <constants/InterfaceConstant.h>
 #include <common/ErrorCode.h>
 #include <exception/BusinessException.h>
 #include <regex>
@@ -40,6 +41,7 @@ void InterfaceServiceImpl::initHttpMethodMap()
 void InterfaceServiceImpl::getHostAndPathFromUrl(const std::string &url, std::string &host, std::string &path)
 {
     int postion = url.find("//");
+	
     int divide_postion = url.find("/", postion + 2);
 
     if (divide_postion != -1)
@@ -120,11 +122,13 @@ std::string InterfaceServiceImpl::syncSendRequest(const HttpRequestPtr &req, con
     return res;
 }
 
-
-std::string InterfaceServiceImpl::getBackground()
+std::string InterfaceServiceImpl::getBackground(const std::string& lx)
 {
+    LOG_INFO << "[getBackground] lx:" << lx;
+
     std::string funName = __FUNCTION__;
     std::string imgurl("");
+        
     try
     {
         auto interface = InterfaceMapper.findOne(Criteria(Interface::Cols::_name, CompareOperator::EQ, funName) &&
@@ -133,8 +137,7 @@ std::string InterfaceServiceImpl::getBackground()
 
         // 从数据库里读取url,requestParams,method
         std::string url = interface.getValueOfUrl();
-        std::string requestParams = interface.getValueOfRequestparams();
-
+        //std::string requestParams = interface.getValueOfRequestparams();
         std::string method = interface.getValueOfMethod();
 
         std::string host("");
@@ -145,8 +148,9 @@ std::string InterfaceServiceImpl::getBackground()
         auto req = HttpRequest::newHttpRequest();
         req->setMethod(httpMethodMap[method]);
         req->setPath(path);
-
-        setHttpRequestParam(req, requestParams);
+		req->setParameter("lx",lx);
+		req->setParameter("format",BACKGROUND_FORMAT);
+        //setHttpRequestParam(req, requestParams);
 
         imgurl = syncSendRequest(req, client, "imgurl");
     }
@@ -178,12 +182,13 @@ std::string InterfaceServiceImpl::getTranslate(const HttpRequestPtr &request)
 
         // 从数据库里读取url,requestParams,method
         std::string url = interface.getValueOfUrl();
-        std::string requestParams = interface.getValueOfRequestparams();
+        //std::string requestParams = interface.getValueOfRequestparams();
         std::string method = interface.getValueOfMethod();
 
-        std::string appid("");
-        std::string key("");
+        std::string appid=FANYI_API_APPID;
+        std::string key=FANYI_API_KEY;
 
+        /*
         Json::Reader reader;
         Json::Value value;
         if (reader.parse(requestParams, value))
@@ -191,6 +196,7 @@ std::string InterfaceServiceImpl::getTranslate(const HttpRequestPtr &request)
             appid = value["appid"].asString();
             key = value["key"].asString(); // 需要加密存储在数据库
         }
+        */
 
         std::string host("");
         std::string path("");
@@ -260,7 +266,7 @@ std::string InterfaceServiceImpl::getCurrentWeather(const HttpRequestPtr &reques
 
         // 从数据库里读取url,requestParams,method
         std::string url = interface.getValueOfUrl();
-        std::string requestParams = interface.getValueOfRequestparams();
+        //std::string requestParams = interface.getValueOfRequestparams();
         std::string method = interface.getValueOfMethod();
 
         std::string host("");
@@ -272,15 +278,15 @@ std::string InterfaceServiceImpl::getCurrentWeather(const HttpRequestPtr &reques
         req->setMethod(httpMethodMap[method]);
         req->setPath(path);
 
-        setHttpRequestParam(req, requestParams); // key
+        //setHttpRequestParam(req, requestParams); // key
         auto json = *(request->getJsonObject());
         std::string city = json.isMember("city") ? json["city"].asString() : "";
 
         // 高德天气API
-        // req->setParameter("key", key);  // 请求服务权限标识
+        req->setParameter("key", WEATHER_API_KEY);  // 请求服务权限标识
         req->setParameter("city", city); // 城市编码
-        // req->setParameter("extensions", to); //气象类型 base:返回实况天气,all:返回预报天气
-        // req->setParameter("output", "JSON");      //返回格式:可选值：JSON,XML ,默认JSON
+        req->setParameter("extensions", "base"); //气象类型 base:返回实况天气,all:返回预报天气
+        req->setParameter("output", "JSON");      //返回格式:可选值：JSON,XML ,默认JSON
 
         weatherInfo = syncSendRequest(req, client);
     }
@@ -304,7 +310,7 @@ std::string InterfaceServiceImpl::getFutureWeather(const HttpRequestPtr &request
 
         // 从数据库里读取url,requestParams,method
         std::string url = interface.getValueOfUrl();
-        std::string requestParams = interface.getValueOfRequestparams();
+        //std::string requestParams = interface.getValueOfRequestparams();
         std::string method = interface.getValueOfMethod();
 
         std::string host("");
@@ -316,15 +322,15 @@ std::string InterfaceServiceImpl::getFutureWeather(const HttpRequestPtr &request
         req->setMethod(httpMethodMap[method]);
         req->setPath(path);
 
-        setHttpRequestParam(req, requestParams); // key
+        //setHttpRequestParam(req, requestParams); // key
         auto json = *(request->getJsonObject());
         std::string city = json.isMember("city") ? json["city"].asString() : "";
 
         // 高德天气API
-        // req->setParameter("key", key);  // 请求服务权限标识
+        req->setParameter("key", WEATHER_API_KEY);  // 请求服务权限标识
         req->setParameter("city", city);        // 城市编码
         req->setParameter("extensions", "all"); // 气象类型 base:返回实况天气,all:返回预报天气
-        // req->setParameter("output", "JSON");      //返回格式:可选值：JSON,XML ,默认JSON
+        req->setParameter("output", "JSON");      //返回格式:可选值：JSON,XML ,默认JSON
 
         weatherInfo = syncSendRequest(req, client);
     }
