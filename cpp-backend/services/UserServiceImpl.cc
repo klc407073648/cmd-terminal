@@ -11,12 +11,12 @@ using namespace drogon::internal;
 
 UserServiceImpl::UserServiceImpl()
 {
-    LOG_DEBUG << "UserServiceImpl constructor!";
+    LOG_INFO << "UserServiceImpl constructor!";
 }
 
 UserServiceImpl::~UserServiceImpl()
 {
-    LOG_DEBUG << "UserServiceImpl destructor!";
+    LOG_INFO << "UserServiceImpl destructor!";
 }
 
 long UserServiceImpl::userRegister(const std::string &userAccount, const std::string &userPassword, const std::string &checkPassword, const std::string &planetCode)
@@ -270,11 +270,18 @@ std::vector<User> UserServiceImpl::searchUsersByTags(std::vector<std::string> ta
 
 bool UserServiceImpl::isAdmin(const HttpRequestPtr &request)
 {
+	LOG_INFO << "UserServiceImpl::isAdmin in";
+	
     bool isFind = request->getSession()->find(USER_LOGIN_STATE);
 
+	LOG_INFO << "UserServiceImpl::isAdmin isFind:"<<isFind;
+	std::string sessionId = request->getSession()->sessionId();
+	LOG_INFO << "UserServiceImpl::isAdmin sessionId:"<<sessionId;
+	
     if (isFind)
     {
         User user = request->getSession()->get<User>(USER_LOGIN_STATE);
+		LOG_INFO << "UserServiceImpl::isAdmin toJson:"<<user.toJson().toStyledString();
         if (user.getValueOfUserrole() == ADMIN_ROLE)
         {
             return true;

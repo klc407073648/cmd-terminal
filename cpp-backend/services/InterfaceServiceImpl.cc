@@ -15,15 +15,15 @@ using namespace cmdterminal;
 using namespace drogon;
 using namespace drogon::internal;
 
-InterfaceServiceImpl::InterfaceServiceImpl()
+InterfaceServiceImpl::InterfaceServiceImpl() : cacheServicePtr_(new CacheServiceImpl())
 {
-    LOG_DEBUG << "InterfaceServiceImpl constructor!";
+    LOG_INFO << "InterfaceServiceImpl constructor!";
     initHttpMethodMap();
 }
 
 InterfaceServiceImpl::~InterfaceServiceImpl()
 {
-    LOG_DEBUG << "InterfaceServiceImpl destructor!";
+    LOG_INFO << "InterfaceServiceImpl destructor!";
 }
 
 void InterfaceServiceImpl::initHttpMethodMap()
@@ -38,106 +38,28 @@ void InterfaceServiceImpl::initHttpMethodMap()
     httpMethodMap["Invalid"] = drogon::Invalid;
 }
 
-void InterfaceServiceImpl::getHostAndPathFromUrl(const std::string &url, std::string &host, std::string &path)
-{
-    int postion = url.find("//");
-	
-    int divide_postion = url.find("/", postion + 2);
-
-    if (divide_postion != -1)
-    {
-        host = url.substr(0, divide_postion);
-        path = url.substr(divide_postion);
-    }
-    else
-    {
-        host = url;
-    }
-
-    LOG_INFO << "[getHostAndPathFromUrl] url:" << url << ", host:" << host << ", path:" << path;
-}
-
-void InterfaceServiceImpl::setHttpRequestParam(const HttpRequestPtr &req, const std::string &jsonStr)
-{
-    Json::Reader reader;
-    Json::Value paramValue;
-
-    if (reader.parse(jsonStr, paramValue))
-    {
-        Json::Value::Members mem = paramValue.getMemberNames();
-
-        for (auto iter = mem.begin(); iter != mem.end(); iter++)
-        {
-            if (paramValue[*iter].type() == Json::objectValue)
-            {
-                setHttpRequestParam(req, paramValue[*iter].asString());
-            }
-            else if (paramValue[*iter].type() == Json::arrayValue)
-            {
-            }
-            else if (paramValue[*iter].type() == Json::stringValue)
-            {
-                req->setParameter(*iter, paramValue[*iter].asString());
-            }
-            else if (paramValue[*iter].type() == Json::realValue)
-            {
-                req->setParameter(*iter, paramValue[*iter].asString());
-            }
-            else if (paramValue[*iter].type() == Json::uintValue)
-            {
-                req->setParameter(*iter, paramValue[*iter].asString());
-            }
-            else
-            {
-                req->setParameter(*iter, paramValue[*iter].asString());
-            }
-        }
-        return;
-    }
-}
-
-std::string InterfaceServiceImpl::syncSendRequest(const HttpRequestPtr &req, const HttpClientPtr &client, const std::string &keyword)
-{
-    std::string res("");
-
-    std::pair<ReqResult, HttpResponsePtr> resp = client->sendRequest(req);
-    std::string respBody = static_cast<std::string>((resp.second)->body());
-
-    LOG_INFO << "[syncSendRequest] respBody:" << respBody;
-
-    if (keyword.empty())
-    {
-        return respBody;
-    }
-
-    Json::Reader reader;
-    Json::Value value;
-    if (reader.parse(respBody, value))
-    {
-        res = value[keyword].asString();
-    }
-
-    LOG_INFO << "[syncSendRequest] keyword:" << keyword << ", value:" << res;
-
-    return res;
-}
-
-std::string InterfaceServiceImpl::getBackground(const std::string& lx)
+std::string InterfaceServiceImpl::getBackground(const std::string &lx)
 {
     LOG_INFO << "[getBackground] lx:" << lx;
 
     std::string funName = __FUNCTION__;
     std::string imgurl("");
-        
+
     try
     {
-        auto interface = InterfaceMapper.findOne(Criteria(Interface::Cols::_name, CompareOperator::EQ, funName) &&
-                                                 Criteria(Interface::Cols::_status, CompareOperator::EQ, "0") &&
-                                                 Criteria(Interface::Cols::_isDelete, CompareOperator::EQ, "0"));
+        // 1. 根据缓存获取接口信息
+        Interface interface;
 
-        // 从数据库里读取url,requestParams,method
+        if (!cacheServicePtr_->getInterfaceInfoByName(funName, interface))
+        {
+            throw BusinessException(ErrorCode::PARAMS_ERROR(), funName + "接口不存在");
+        }
+
+        // 2. 校验接口内容有效性
+        checkInterface(interface);
+
+        // 3. 读取url,method
         std::string url = interface.getValueOfUrl();
-        //std::string requestParams = interface.getValueOfRequestparams();
         std::string method = interface.getValueOfMethod();
 
         std::string host("");
@@ -148,9 +70,8 @@ std::string InterfaceServiceImpl::getBackground(const std::string& lx)
         auto req = HttpRequest::newHttpRequest();
         req->setMethod(httpMethodMap[method]);
         req->setPath(path);
-		req->setParameter("lx",lx);
-		req->setParameter("format",BACKGROUND_FORMAT);
-        //setHttpRequestParam(req, requestParams);
+        req->setParameter("lx", lx);
+        req->setParameter("format", BACKGROUND_FORMAT);
 
         imgurl = syncSendRequest(req, client, "imgurl");
     }
@@ -162,50 +83,39 @@ std::string InterfaceServiceImpl::getBackground(const std::string& lx)
     return imgurl;
 }
 
-void InterfaceServiceImpl::toLower(std::string &str)
-{
-    for (int i = 0; i < str.size(); i++)
-    {
-        str[i] = tolower(str[i]);
-    }
-}
-
 std::string InterfaceServiceImpl::getTranslate(const HttpRequestPtr &request)
 {
     std::string funName = __FUNCTION__;
     std::string translateRes("");
     try
     {
-        auto interface = InterfaceMapper.findOne(Criteria(Interface::Cols::_name, CompareOperator::EQ, funName) &&
-                                                 Criteria(Interface::Cols::_status, CompareOperator::EQ, "0") &&
-                                                 Criteria(Interface::Cols::_isDelete, CompareOperator::EQ, "0"));
+        // 1. 根据缓存获取接口信息
+        Interface interface;
 
-        // 从数据库里读取url,requestParams,method
+        if (!cacheServicePtr_->getInterfaceInfoByName(funName, interface))
+        {
+            throw BusinessException(ErrorCode::PARAMS_ERROR(), funName + "接口不存在");
+        }
+
+        // 2. 校验接口内容有效性
+        checkInterface(interface);
+
+        // 3. 读取url,method
         std::string url = interface.getValueOfUrl();
-        //std::string requestParams = interface.getValueOfRequestparams();
         std::string method = interface.getValueOfMethod();
 
-        std::string appid=FANYI_API_APPID;
-        std::string key=FANYI_API_KEY;
-
-        /*
-        Json::Reader reader;
-        Json::Value value;
-        if (reader.parse(requestParams, value))
-        {
-            appid = value["appid"].asString();
-            key = value["key"].asString(); // 需要加密存储在数据库
-        }
-        */
+        // 4. 从数据库获取密钥信息
+        std::string appid = FANYI_API_APPID;
+        std::string key = FANYI_API_KEY;
 
         std::string host("");
         std::string path("");
         getHostAndPathFromUrl(url, host, path);
-
         auto client = HttpClient::newHttpClient(host);
 
-        // 百度云翻译api方法
-        auto json = *(request->getJsonObject());
+        // 5. 百度云翻译api方法
+        auto json = *(request->getJsonObject()); // 从请求参数中获取keywords,from,to内容
+
         std::string keywords = json.isMember("keywords") ? json["keywords"].asString() : "";
         std::string from = json.isMember("config") ? ((json["config"]).isMember("from") ? json["config"]["from"].asString() : "") : "";
         std::string to = json.isMember("config") ? ((json["config"]).isMember("to") ? json["config"]["to"].asString() : "") : "";
@@ -239,11 +149,18 @@ std::string InterfaceServiceImpl::getBackendVersion()
     std::string version("");
     try
     {
-        auto interface = InterfaceMapper.findOne(Criteria(Interface::Cols::_name, CompareOperator::EQ, funName) &&
-                                                 Criteria(Interface::Cols::_status, CompareOperator::EQ, "0") &&
-                                                 Criteria(Interface::Cols::_isDelete, CompareOperator::EQ, "0"));
+        // 1. 根据缓存获取接口信息
+        Interface interface;
 
-        // 从数据库里读取url,requestParams,method
+        if (!cacheServicePtr_->getInterfaceInfoByName(funName, interface))
+        {
+            throw BusinessException(ErrorCode::PARAMS_ERROR(), funName + "接口不存在");
+        }
+
+        // 2. 校验接口内容有效性
+        checkInterface(interface);
+
+        // 3. 返回后端版本号,待存储到数据库
         version = "drogon:V1.1.0";
     }
     catch (const DrogonDbException &e)
@@ -260,33 +177,39 @@ std::string InterfaceServiceImpl::getCurrentWeather(const HttpRequestPtr &reques
     std::string weatherInfo("");
     try
     {
-        auto interface = InterfaceMapper.findOne(Criteria(Interface::Cols::_name, CompareOperator::EQ, funName) &&
-                                                 Criteria(Interface::Cols::_status, CompareOperator::EQ, "0") &&
-                                                 Criteria(Interface::Cols::_isDelete, CompareOperator::EQ, "0"));
+        // 1. 根据缓存获取接口信息
+        Interface interface;
 
-        // 从数据库里读取url,requestParams,method
+        if (!cacheServicePtr_->getInterfaceInfoByName(funName, interface))
+        {
+            throw BusinessException(ErrorCode::PARAMS_ERROR(), funName + "接口不存在");
+        }
+
+        // 2. 校验接口内容有效性
+        checkInterface(interface);
+
+        // 3. 获取url,method
         std::string url = interface.getValueOfUrl();
-        //std::string requestParams = interface.getValueOfRequestparams();
         std::string method = interface.getValueOfMethod();
 
         std::string host("");
         std::string path("");
         getHostAndPathFromUrl(url, host, path);
 
+        // 4. 填写对应请求内容，发送请求
         auto client = HttpClient::newHttpClient(host);
         auto req = HttpRequest::newHttpRequest();
         req->setMethod(httpMethodMap[method]);
         req->setPath(path);
 
-        //setHttpRequestParam(req, requestParams); // key
         auto json = *(request->getJsonObject());
         std::string city = json.isMember("city") ? json["city"].asString() : "";
 
         // 高德天气API
-        req->setParameter("key", WEATHER_API_KEY);  // 请求服务权限标识
-        req->setParameter("city", city); // 城市编码
-        req->setParameter("extensions", "base"); //气象类型 base:返回实况天气,all:返回预报天气
-        req->setParameter("output", "JSON");      //返回格式:可选值：JSON,XML ,默认JSON
+        req->setParameter("key", WEATHER_API_KEY); // 请求服务权限标识
+        req->setParameter("city", city);           // 城市编码
+        req->setParameter("extensions", "base");   // 气象类型 base:返回实况天气,all:返回预报天气
+        req->setParameter("output", "JSON");       // 返回格式:可选值：JSON,XML ,默认JSON
 
         weatherInfo = syncSendRequest(req, client);
     }
@@ -304,33 +227,39 @@ std::string InterfaceServiceImpl::getFutureWeather(const HttpRequestPtr &request
     std::string weatherInfo("");
     try
     {
-        auto interface = InterfaceMapper.findOne(Criteria(Interface::Cols::_name, CompareOperator::EQ, funName) &&
-                                                 Criteria(Interface::Cols::_status, CompareOperator::EQ, "0") &&
-                                                 Criteria(Interface::Cols::_isDelete, CompareOperator::EQ, "0"));
+        // 1. 根据缓存获取接口信息
+        Interface interface;
 
-        // 从数据库里读取url,requestParams,method
+        if (!cacheServicePtr_->getInterfaceInfoByName(funName, interface))
+        {
+            throw BusinessException(ErrorCode::PARAMS_ERROR(), funName + "接口不存在");
+        }
+
+        // 2. 校验接口内容有效性
+        checkInterface(interface);
+
+        // 3. 获取url,method
         std::string url = interface.getValueOfUrl();
-        //std::string requestParams = interface.getValueOfRequestparams();
         std::string method = interface.getValueOfMethod();
 
         std::string host("");
         std::string path("");
         getHostAndPathFromUrl(url, host, path);
 
+        // 4. 填写对应请求内容，发送请求
         auto client = HttpClient::newHttpClient(host);
         auto req = HttpRequest::newHttpRequest();
         req->setMethod(httpMethodMap[method]);
         req->setPath(path);
 
-        //setHttpRequestParam(req, requestParams); // key
         auto json = *(request->getJsonObject());
         std::string city = json.isMember("city") ? json["city"].asString() : "";
 
         // 高德天气API
-        req->setParameter("key", WEATHER_API_KEY);  // 请求服务权限标识
-        req->setParameter("city", city);        // 城市编码
-        req->setParameter("extensions", "all"); // 气象类型 base:返回实况天气,all:返回预报天气
-        req->setParameter("output", "JSON");      //返回格式:可选值：JSON,XML ,默认JSON
+        req->setParameter("key", WEATHER_API_KEY); // 请求服务权限标识
+        req->setParameter("city", city);           // 城市编码
+        req->setParameter("extensions", "all");    // 气象类型 base:返回实况天气,all:返回预报天气
+        req->setParameter("output", "JSON");       // 返回格式:可选值：JSON,XML ,默认JSON
 
         weatherInfo = syncSendRequest(req, client);
     }
@@ -340,4 +269,120 @@ std::string InterfaceServiceImpl::getFutureWeather(const HttpRequestPtr &request
     }
 
     return weatherInfo;
+}
+
+void InterfaceServiceImpl::getHostAndPathFromUrl(const std::string &url, std::string &host, std::string &path)
+{
+    try
+    {
+        int postion = url.find("//");
+
+        int divide_postion = url.find("/", postion + 2);
+
+        if (divide_postion != -1)
+        {
+            host = url.substr(0, divide_postion);
+            path = url.substr(divide_postion);
+        }
+        else
+        {
+            host = url;
+        }
+
+        LOG_INFO << "[getHostAndPathFromUrl] url:" << url << ", host:" << host << ", path:" << path;
+    }
+    catch (...)
+    {
+        throw BusinessException(ErrorCode::PARAMS_ERROR(), "解析接口url信息错误");
+    }
+}
+
+void InterfaceServiceImpl::getRequestParams(const std::string &json, std::map<std::string, std::string> &retMap)
+{
+    Json::Reader reader;
+    Json::Value paramValue;
+
+    if (reader.parse(json, paramValue))
+    {
+        Json::Value::Members mem = paramValue.getMemberNames();
+
+        for (auto iter = mem.begin(); iter != mem.end(); iter++)
+        {
+            if (paramValue[*iter].type() == Json::objectValue)
+            {
+                getRequestParams(paramValue[*iter].asString(), retMap);
+            }
+            else if (paramValue[*iter].type() == Json::arrayValue)
+            {
+                // 数组则不处理
+            }
+            else if (paramValue[*iter].type() == Json::stringValue)
+            {
+                retMap[*iter] = paramValue[*iter].asString();
+            }
+            else if (paramValue[*iter].type() == Json::realValue)
+            {
+                retMap[*iter] = paramValue[*iter].asString();
+            }
+            else if (paramValue[*iter].type() == Json::uintValue)
+            {
+                retMap[*iter] = paramValue[*iter].asString();
+            }
+            else
+            {
+                retMap[*iter] = paramValue[*iter].asString();
+            }
+        }
+        return;
+    }
+}
+
+std::string InterfaceServiceImpl::syncSendRequest(const HttpRequestPtr &req, const HttpClientPtr &client, const std::string &keyword)
+{
+    std::string res("");
+
+    std::pair<ReqResult, HttpResponsePtr> resp = client->sendRequest(req);
+    std::string respBody = static_cast<std::string>((resp.second)->body());
+
+    LOG_INFO << "[syncSendRequest] respBody:" << respBody;
+
+    if (keyword.empty())
+    {
+        return respBody;
+    }
+
+    Json::Reader reader;
+    Json::Value value;
+    if (reader.parse(respBody, value))
+    {
+        res = value[keyword].asString();
+    }
+
+    LOG_INFO << "[syncSendRequest] keyword:" << keyword << ", value:" << res;
+
+    return res;
+}
+
+void InterfaceServiceImpl::checkInterface(const Interface &interface)
+{
+    std::string name = interface.getValueOfName();
+
+    if (interface.getValueOfStatus() != 0)
+    {
+        throw BusinessException(ErrorCode::PARAMS_ERROR(), name + "接口状态异常");
+    }
+
+    /*
+    if(interface.getValueOfIsdelete != "0"){
+        throw BusinessException(ErrorCode::PARAMS_ERROR(), name + "接口已经删除");
+    }
+    */
+}
+
+void InterfaceServiceImpl::toLower(std::string &str)
+{
+    for (int i = 0; i < str.size(); i++)
+    {
+        str[i] = tolower(str[i]);
+    }
 }

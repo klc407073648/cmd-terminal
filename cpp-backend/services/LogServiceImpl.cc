@@ -8,12 +8,12 @@ using namespace drogon::internal;
 
 LogServiceImpl::LogServiceImpl()
 {
-    LOG_DEBUG << "LogServiceImpl constructor!";
+    LOG_INFO << "LogServiceImpl constructor!";
 }
 
 LogServiceImpl::~LogServiceImpl()
 {
-    LOG_DEBUG << "LogServiceImpl destructor!";
+    LOG_INFO << "LogServiceImpl destructor!";
 }
 
 bool LogServiceImpl::writeUserLog(long userid, const std::string &content)
