@@ -42,30 +42,27 @@ const weatherCommand: CommandType = {
                 return;
             }
             const city = _.join(" ");
-            var weather;
             var weatherInfo;
 
             if (!future) {
                 //未来天气
-                weather = await getFutureWeather(city, future).catch((err) => {
-                    terminal.writeTextErrorResult(err?.name + ":" + err?.message);
-                });
+                const weather = await getFutureWeather(city, future)
+                if (weather?.code !== 0) {
+                    terminal.writeTextErrorResult(weather?.message + ":" + weather?.description);
+                    return;
+                }
 
                 weatherInfo = (JSON.parse(weather?.data))?.forecasts
             }
             else{
                 //当天天气
-                weather = await getCurrentWeather(city).catch((err) => {
-                    terminal.writeTextErrorResult(err?.name + ":" + err?.message);
-                });
-                weatherInfo = (JSON.parse(weather?.data))?.lives
-            }
+                const weather = await getCurrentWeather(city)
+                if (weather?.code !== 0) {
+                    terminal.writeTextErrorResult(weather?.message + ":" + weather?.description);
+                    return;
+                }
 
-            // 请求成功
-            //调整
-            if (weather?.code !== 0) {
-                terminal.writeTextErrorResult(weather?.message + ":" + weather?.description);
-                return;
+                weatherInfo = (JSON.parse(weather?.data))?.lives
             }
 
             console.log(weatherInfo)

@@ -1,4 +1,5 @@
 import myAxios from "../../../../plugins/myAxios";
+import {AXIOS_ERROR, AxiosErrorResponse} from "../../../../constants/ResponseUtil";
 
 /**
  * 翻译文本
@@ -11,7 +12,9 @@ export const getCurrentWeather = async (
   if (!city) {
     return null;
   }
-  return await myAxios.post("/weather/now", { city });
+  return await myAxios.post("/weather/now", { city }).catch((err) => {
+    return AxiosErrorResponse(AXIOS_ERROR,"",err)
+  });
 };
 
 export const getFutureWeather = async (
@@ -21,5 +24,7 @@ export const getFutureWeather = async (
   if (!city) {
     return null;
   }
-  return await myAxios.post("/weather/future", { city,days });
+  return await myAxios.post("/weather/future", { city,days }).catch((err) => {
+    return AxiosErrorResponse(AXIOS_ERROR,"",err)
+  });
 };

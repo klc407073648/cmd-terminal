@@ -51,14 +51,7 @@ const backgroundCommand: CommandType = {
 
         if (!url) {
             // 随机获取壁纸
-            const res = await getRandomBackground(lx).catch((err) => {
-                terminal.writeTextErrorResult(err?.name + ":" + err?.message);
-            });
-
-            //异常返回直接return
-            if(!res){
-                return;
-            }
+            const res = await getRandomBackground(lx)
 
             if (res?.code !== 0) {
                 terminal.writeTextErrorResult(res?.message + ":" + res?.description);

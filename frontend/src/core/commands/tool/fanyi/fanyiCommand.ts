@@ -48,18 +48,7 @@ const fanyiCommand: CommandType = {
       return;
     }
     const keywords = _.join(" ");
-    const res: any = await translate(keywords, {
-      from,
-      to,
-    }).catch((err) => {
-      //异常捕获
-      terminal.writeTextErrorResult(err?.name + ":" + err?.message);
-    });
-
-    //异常返回直接return
-    if(!res){
-      return;
-    }
+    const res: any = await translate(keywords, {from, to,})
 
     if (res?.code === 0) {
       //const tmp :fanyiResultType = JSON.parse(res.data);
@@ -70,7 +59,7 @@ const fanyiCommand: CommandType = {
         `翻译结果：${(JSON.parse(res.data)).trans_result[0].dst}`
       );
     } else {
-      terminal.writeTextErrorResult(res?.message ?? "翻译失败");
+      terminal.writeTextErrorResult(res?.message + ":" + res?.description);
     }
   },
 };

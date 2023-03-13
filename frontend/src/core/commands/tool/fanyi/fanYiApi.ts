@@ -1,4 +1,5 @@
 import myAxios from "../../../../plugins/myAxios";
+import {AXIOS_ERROR, AxiosErrorResponse} from "../../../../constants/ResponseUtil";
 
 /**
  * 翻译文本
@@ -12,5 +13,7 @@ export const translate = async (
   if (!keywords) {
     return null;
   }
-  return await myAxios.post("/fanyi/translate", { keywords, config });
+  return await myAxios.post("/fanyi/translate", { keywords, config }).catch((err) => {
+    return AxiosErrorResponse(AXIOS_ERROR,"",err)
+  });
 };
