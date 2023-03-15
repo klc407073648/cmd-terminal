@@ -10,7 +10,7 @@ import useCommandOptionType from "../../../constants/CommandOptionType";
 import doubanCommand from "./doubanCommand";
 import csdnCommand from "./csdnCommand";
 
-const { searchContext,isOpenCur} = useCommandOptionType()
+const { searchContext,isOpenCur,displaySearchItem} = useCommandOptionType()
 
 /**
  * 搜索源
@@ -48,13 +48,7 @@ const searchCommand: CommandType = {
       defaultValue: "baidu",
     },
     isOpenCur,
-    {
-      key: "item",
-      desc: "显示搜索源",
-      alias: ["i"],
-      type: "boolean",
-      defaultValue: false,
-    },
+    displaySearchItem,
   ],
   // 默认使用百度搜索
   action: (options, terminal) => {

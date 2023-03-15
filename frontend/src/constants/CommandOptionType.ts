@@ -29,6 +29,14 @@ const useCommandOptionType = () => {
             type: "boolean",
             defaultValue: false,
         }
+    const displaySearchItem: CommandOptionType =
+    {
+        key: "item",
+        desc: "显示搜索源",
+        alias: ["i"],
+        type: "boolean",
+        defaultValue: false,
+    }
     /**
      * 搜索内容
      * @author klc
@@ -41,10 +49,13 @@ const useCommandOptionType = () => {
         }
 
 
+
+
     return {
         isOpenCur,
         searchContext,
         isHide,
+        displaySearchItem,
     };
 };
 

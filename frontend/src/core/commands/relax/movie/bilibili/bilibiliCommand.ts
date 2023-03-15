@@ -1,9 +1,8 @@
 import { CommandType } from "../../../../command";
 import { defineAsyncComponent } from "vue";
 import ComponentOutputType = CmdTerminal.ComponentOutputType;
-import isOpenCur from "../../../../../constants/CommandOptionType";
-
-const baseUrl = "https://www.baidu.com/s";
+import useCommandOptionType from "../../../../../constants/CommandOptionType";
+const { searchContext,isOpenCur} = useCommandOptionType()
 
 /**
  * B 站搜索命令
@@ -14,11 +13,7 @@ const bilibiliCommand: CommandType = {
   name: "bilibili 搜索",
   alias: ["bzhan", "bili"],
   params: [
-    {
-      key: "word",
-      desc: "搜索内容",
-      required: true,
-    },
+    searchContext
   ],
   options: [
     isOpenCur,

@@ -2,7 +2,7 @@
 
 #pragma once
 
-const std::string USER_LOGIN_STATE = "userLoginState"; //session保存登陆态
+const std::string USER_LOGIN_STATE = "userLoginState"; //session保存登录态
 
 //用户权限
 const int ADMIN_ROLE = 1;                              //管理员权限

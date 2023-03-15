@@ -33,7 +33,7 @@ namespace cmdterminal
     virtual long userRegister(const std::string &userAccount, const std::string &userPassword, const std::string &checkPassword, const std::string &planetCode="10000") = 0;
 
     /**
-     * @brief 用户登陆
+     * @brief 用户登录
      *
      * @param userAccount  用户账号
      * @param userPassword 用户密码

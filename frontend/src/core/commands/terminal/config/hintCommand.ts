@@ -22,9 +22,15 @@ const hintCommand: CommandType = {
     const { setOrToggleShowHint } = useTerminalConfigStore();
     let newHint;
     if (_.length >= 1) {
+      if(!(_[0] === "on" ||_[0] === "off")){
+        terminal.writeTextErrorResult("输入on 或 off");
+        return;
+      }
+      /*
       if (["on", "off"].includes(_[0])) {
         newHint = _[0];
       }
+      */
     }
     const res = setOrToggleShowHint(newHint);
     terminal.writeTextSuccessResult(

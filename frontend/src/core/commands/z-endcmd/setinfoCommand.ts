@@ -5,7 +5,7 @@ import TextOutputType = CmdTerminal.TextOutputType;
 
 import useCommandOptionType from "../../../constants/CommandOptionType";
 
-const { searchContext} = useCommandOptionType()
+const { searchContext,displaySearchItem} = useCommandOptionType()
 
 import {commandMap} from "../../commandRegister";
 import relaxSet from "../../cmdsets/relaxSet"
@@ -41,9 +41,11 @@ const setinfoCommand: CommandType = {
   name: "查看命令集",
   alias: ["set"],
   params: [
-    searchContext
+    searchContext,
   ],
-  options: [],
+  options: [
+    displaySearchItem,
+  ],
   action(options, terminal): void {
 
     if(!isAdmin()){
@@ -51,10 +53,20 @@ const setinfoCommand: CommandType = {
       return;
     }
 
-    const { _, self } = options;
-    const word = _.length > 0 ? _[0] : "";
+    const { _, self,item } = options;
+    //const word = _.length > 0 ? _[0] : "";
+
+    if(item){
+      terminal.writeTextSuccessResult("搜索源:" + Object.keys(fullCmdSet).toString());
+      return
+    }
+
+    const word = _.length > 0 ? (_.join(" ")).trim() : "";//去掉前后空格
+
+    console.log("word:"+word)
     if(word == ""){
       terminal.writeTextErrorResult("查询命令集必须输入：" + Object.keys(fullCmdSet));
+      return;
     }
     var curCmdSet = fullCmdSet[word];
     const output: ComponentOutputType = {

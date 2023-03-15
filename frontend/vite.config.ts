@@ -17,4 +17,14 @@ export default defineConfig({
     }),
     process.env.BUILD_CRX && chromeExtension(),
   ].filter(Boolean),
+  server:{
+    proxy: {// 跨域代理
+      '^/api': {
+        // target: 'http://' + env.VUE_APP_BASE_API,
+        target: 'http://81.68.132.31:8082/api', //
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, '')
+      },
+  },
+  }
 });

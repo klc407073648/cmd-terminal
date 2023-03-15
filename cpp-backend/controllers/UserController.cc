@@ -31,17 +31,17 @@ namespace drogon
         auto userJson = (*json);
         auto user = User(userJson);
 
-        LOG_INFO << "UserController::fromRequest user:" << jsonStr;
-        LOG_INFO << "UserController::fromRequest Method:" << req.getMethodString();
-        LOG_INFO << "UserController::fromRequest Headers:" << unordered_map2string(req.getHeaders());
-		LOG_INFO << "UserController::fromRequest Cookies:" << unordered_map2string(req.getCookies());
-		LOG_INFO << "UserController::fromRequest Query string:" << req.getQuery();
-		LOG_INFO << "UserController::fromRequest Body:" << req.getBody();
-		LOG_INFO << "UserController::fromRequest Path:" << req.getPath();
+        //LOG_INFO << "UserController::fromRequest user:" << jsonStr;
+        //LOG_INFO << "UserController::fromRequest Method:" << req.getMethodString();
+        ///LOG_INFO << "UserController::fromRequest Headers:" << unordered_map2string(req.getHeaders());
+		//LOG_INFO << "UserController::fromRequest Cookies:" << unordered_map2string(req.getCookies());
+		//LOG_INFO << "UserController::fromRequest Query string:" << req.getQuery();
+		//LOG_INFO << "UserController::fromRequest Body:" << req.getBody();
+		//LOG_INFO << "UserController::fromRequest Path:" << req.getPath();
 		//LOG_INFO << "UserController::fromRequest Version:" << req.getVersionString();
-        LOG_INFO << "UserController::fromRequest Parameters:" << unordered_map2string(req.getParameters());
-		LOG_INFO << "UserController::fromRequest LocalAddr:" << req.getLocalAddr().toIpPort();
-		LOG_INFO << "UserController::fromRequest PeerAddr:" << req.getPeerAddr().toIpPort();
+        //LOG_INFO << "UserController::fromRequest Parameters:" << unordered_map2string(req.getParameters());
+		//LOG_INFO << "UserController::fromRequest LocalAddr:" << req.getLocalAddr().toIpPort();
+		//LOG_INFO << "UserController::fromRequest PeerAddr:" << req.getPeerAddr().toIpPort();
         return user;
     }
 }
