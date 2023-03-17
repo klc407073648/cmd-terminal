@@ -1,4 +1,16 @@
-# 前端目录结构和详细内容
+# 前端
+
+# 目录结构
+
+- components   组件封装
+- configs      配置文件(路由配置)
+- constants    常量
+- core         核心文件(命令具体实现)
+- pages        页面 
+- plugins      插件封装
+- utils        工具类
+
+# 详细内容
 
 ## components
 

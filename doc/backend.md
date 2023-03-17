@@ -1,15 +1,15 @@
 # 后端实现
 
-# 概述
+## 目录结构
 
-利用 Drogon 的C++ Web开发框架，实现MVC风格的代码格式。
-
-* M层: 采用Drogon自带的orm框架，连接数据库自动生成models文件
-* C层: 使用 Controller 风格，可以直接设置请求路径对应的处理函数的映射关系。
-	* 提供统一的过滤器处理
-	* http请求前置处理
-
-# 后端服务
+- common      公共处理类封装
+- constants   常量
+- controllers 控制逻辑层
+- exception   异常
+- filters     过滤器
+- models      模型文件
+- plugins     插件
+- services    具体业务逻辑
 
 ## 内容
 
@@ -46,3 +46,22 @@
 	* searchUsers, "/api/user/search", Get
 	* getCurrentUser, "/api/user/current", Get
 	* deleteUsers, "/api/user/delete", Post
+
+## 工程使用
+
+```
+# 创建工程
+dg_ctl create project usercenter
+
+# 控制器创建
+cd ./usercenter/controllers/
+dg_ctl create controller -h ControllerTest
+
+# 过滤器创建
+cd ../filters/
+dg_ctl create filter LoginFilter
+
+# 创建模型，需要配置config.json里mysql配置信息
+cd ..
+dg_ctl create model models
+```

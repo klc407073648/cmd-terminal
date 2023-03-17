@@ -3,6 +3,7 @@
 > Coolest browser term for geeks! 
 > 
 > 项目来源 [YuIndex](https://github.com/liyupi/yuindex)
+> 
 > 在鱼皮YuIndex开源项目的基础上，添加了个人定制化的功能，且将后端重新用cpp实现。
 
 ## CmdTerminal 是什么？
@@ -13,9 +14,9 @@
 
 项目界面展示 ⭐️ 
 
-![YuIndex 定制你的最强主页](./images/界面展示1.png)
+![YuIndex 定制你的最强主页](./images/项目展示1.png)
 
-![YuIndex 用命令来控制网页](./images/界面展示2.png)
+![YuIndex 用命令来控制网页](./images/项目展示2.png)
 
 ## 快速上手
 
@@ -84,19 +85,6 @@ history
 
 ![快捷键](./images/快捷键.png)
 
-> **完整命令用法**请见：[命令手册](./doc/commands.md)
-
-- 多平台搜索    search
-- 天气          weather
-- 查看日期      date
-- 翻译          fanyi
-- 待办事项      todo
-- 网络检测      ping
-- 定时器        timing
-- 更换背景      background
-- 博客推荐      blog
-- 其他
-
 ## 项目优势
 
 ### 用户
@@ -153,6 +141,21 @@ history
 - 自定义配置（比如更换背景、提示开关等）
 - 支持子命令
 
+### 已支持命令
+
+> **完整命令用法**请见：[命令手册](./doc/commands.md)
+
+- 多平台搜索    search
+- 天气          weather
+- 查看日期      date
+- 翻译          fanyi
+- 待办事项      todo
+- 网络检测      ping
+- 定时器        timing
+- 更换背景      background
+- 博客推荐      blog
+- 其他
+
 ## 技术栈
 
 ### 前端
@@ -174,16 +177,6 @@ history
 - lodash 工具库
 - getopts 命令参数解析
 
-#### 目录结构
-
-- components   组件封装
-- configs      配置文件(路由配置)
-- constants    常量
-- core         核心文件(命令具体实现)
-- pages        页面 
-- plugins      插件封装
-- utils        工具类
-
 [点击了解前端详情](doc/frontend.md)
 
 ### 后端
@@ -201,17 +194,6 @@ history
 - 高德天气API
 
 [点击了解后端详情](doc/backend.md)
-
-#### 目录结构
-
-- common      公共处理类封装
-- constants   常量
-- controllers 控制逻辑层
-- exception   异常
-- filters     过滤器
-- models      模型文件
-- plugins     插件
-- services    具体业务逻辑
 
 ## 系统设计
 
@@ -232,7 +214,7 @@ history
 
 前端架构图：
 
-(./images/前端架构图.png)
+![前端架构图](./images/前端架构图.png)
 
 #### 微终端
 
@@ -310,22 +292,3 @@ history
 	* 缓存服务	
 		* 可以使用本地缓存和redis缓存两种，用枚举区分,  后期考虑定时更新,数据库和缓存同步，Redis待实现
 		* 目前作用: 后端启动时加载第三方接口数据库中相关数据，后续调用InterfaceService时，不需要每次都去查询(第三方接口变动不大)
-
-#### 工程使用
-
-```
-# 创建工程
-dg_ctl create project usercenter
-
-# 控制器创建
-cd ./usercenter/controllers/
-dg_ctl create controller -h ControllerTest
-
-# 过滤器创建
-cd ../filters/
-dg_ctl create filter LoginFilter
-
-# 创建模型，需要配置config.json里mysql配置信息
-cd ..
-dg_ctl create model models
-```
