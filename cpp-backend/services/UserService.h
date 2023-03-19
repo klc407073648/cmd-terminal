@@ -13,8 +13,6 @@ using namespace drogon;
 // UserService 纯虚函数，接口类
 namespace cmdterminal
 {
-  //static std::string S_PLANET_CODE = "10000";
-
   class UserService;
   using UserServicePtr = std::shared_ptr<UserService>;
 

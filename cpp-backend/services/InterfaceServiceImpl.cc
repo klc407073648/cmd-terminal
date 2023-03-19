@@ -38,10 +38,8 @@ void InterfaceServiceImpl::initHttpMethodMap()
     httpMethodMap["Invalid"] = drogon::Invalid;
 }
 
-std::string InterfaceServiceImpl::getBackground(const std::string &lx)
+std::string InterfaceServiceImpl::getBackground(const HttpRequestPtr &request)
 {
-    LOG_INFO << "[getBackground] lx:" << lx;
-
     std::string funName = __FUNCTION__;
     std::string imgurl("");
 
@@ -61,6 +59,7 @@ std::string InterfaceServiceImpl::getBackground(const std::string &lx)
         // 3. 读取url,method
         std::string url = interface.getValueOfUrl();
         std::string method = interface.getValueOfMethod();
+        std::string lx = ((*(request->getJsonObject()))["lx"]).asString();
 
         std::string host("");
         std::string path("");
@@ -87,6 +86,7 @@ std::string InterfaceServiceImpl::getTranslate(const HttpRequestPtr &request)
 {
     std::string funName = __FUNCTION__;
     std::string translateRes("");
+
     try
     {
         // 1. 根据缓存获取接口信息
@@ -143,10 +143,11 @@ std::string InterfaceServiceImpl::getTranslate(const HttpRequestPtr &request)
     return translateRes;
 }
 
-std::string InterfaceServiceImpl::getBackendVersion()
+std::string InterfaceServiceImpl::getBackendVersion(const HttpRequestPtr &request)
 {
     std::string funName = __FUNCTION__;
     std::string version("");
+    
     try
     {
         // 1. 根据缓存获取接口信息

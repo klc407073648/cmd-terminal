@@ -10,8 +10,6 @@ using namespace drogon;
 // InterfaceService 纯虚函数，接口类
 namespace cmdterminal
 {
-  static std::string S_PLANET_CODE = "10000";
-
   class InterfaceService;
   using InterfaceServicePtr = std::shared_ptr<InterfaceService>;
 
@@ -22,7 +20,7 @@ namespace cmdterminal
      * @brief 获取随机背景地址
      *
      */
-    virtual std::string getBackground(const std::string& lx) = 0;
+    virtual std::string getBackground(const HttpRequestPtr &request) = 0;
 
     /**
      * @brief 获取翻译结果
@@ -34,7 +32,7 @@ namespace cmdterminal
      * @brief 获取后台版本信息
      *
      */
-    virtual std::string getBackendVersion() = 0;
+    virtual std::string getBackendVersion(const HttpRequestPtr &request) = 0;
 
     /**
      * @brief 获取当前天气

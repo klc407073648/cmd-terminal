@@ -7,8 +7,8 @@
 #include <drogon/drogon.h>
 #include <map>
 
-using drogon_model::cmdterminal::Interface;
 using cmdterminal::CacheServicePtr;
+using drogon_model::cmdterminal::Interface;
 
 namespace cmdterminal
 {
@@ -18,9 +18,9 @@ namespace cmdterminal
     InterfaceServiceImpl();
     ~InterfaceServiceImpl();
 
-    std::string getBackground(const std::string &lx) override;
+    std::string getBackground(const HttpRequestPtr &request) override;
     std::string getTranslate(const HttpRequestPtr &request) override;
-    std::string getBackendVersion() override;
+    std::string getBackendVersion(const HttpRequestPtr &request) override;
     std::string getCurrentWeather(const HttpRequestPtr &request) override;
     std::string getFutureWeather(const HttpRequestPtr &request) override;
 
@@ -52,7 +52,7 @@ namespace cmdterminal
 
     void initHttpMethodMap();
     void toLower(std::string &str);
-	void checkInterface(const Interface &interface);
+    void checkInterface(const Interface &interface);
 
   private:
     CacheServicePtr cacheServicePtr_;

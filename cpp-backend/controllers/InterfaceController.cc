@@ -19,8 +19,7 @@ void InterfaceController::getBackground(const HttpRequestPtr &request, std::func
 {
     try
     {
-        std::string lx = ((*(request->getJsonObject()))["lx"]).asString();
-        std::string url = srvPtr_->getBackground(lx);
+        std::string url = srvPtr_->getBackground(request);
         callNormalResponse(std::move(callback), url);
     }
     catch (BusinessException &e)
@@ -47,7 +46,7 @@ void InterfaceController::getBackendVersion(const HttpRequestPtr &request, std::
 {
     try
     {
-        std::string version = srvPtr_->getBackendVersion();
+        std::string version = srvPtr_->getBackendVersion(request);
         callNormalResponse(std::move(callback), version);
     }
     catch (BusinessException &e)

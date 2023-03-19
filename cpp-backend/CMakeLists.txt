@@ -1,6 +1,11 @@
 cmake_minimum_required(VERSION 3.5)
 project(cmdterminal CXX)
 
+# 依赖StiBel库的内容 封装成StiBel.cmake文件
+set(CMAKE_PREFIX_PATH   "${CMAKE_CURRENT_SOURCE_DIR}/lib/3partlib/lib64/cmake")
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/stibel.cmake)
+# 依赖StiBel库的内容
+
 include(CheckIncludeFileCXX)
 
 check_include_file_cxx(any HAS_ANY)
@@ -55,14 +60,11 @@ aux_source_directory(services SERVICE_SRC)
 aux_source_directory(services/inner SERVICE_INNER_SRC)
 
 drogon_create_views(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/views
-                    ${CMAKE_CURRENT_BINARY_DIR})
-# use the following line to create views with namespaces.
-# drogon_create_views(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/views
-#                     ${CMAKE_CURRENT_BINARY_DIR} TRUE)
+                    ${CMAKE_CURRENT_BINARY_DIR} TRUE)
 
 target_include_directories(${PROJECT_NAME}
-                           PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}
-								   /home/drogon/drogon/lib/inc)
+                           PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+
 target_sources(${PROJECT_NAME}
                PRIVATE
                ${SRC_DIR}
@@ -83,3 +85,5 @@ target_sources(${PROJECT_NAME}
 # ##############################################################################
 
 add_subdirectory(test)
+
+add_subdirectory(testcase/googletest)

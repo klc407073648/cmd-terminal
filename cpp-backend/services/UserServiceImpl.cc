@@ -266,6 +266,8 @@ std::string UserServiceImpl::encryptPwd(const std::string &str)
 
 std::vector<User> UserServiceImpl::searchUsersByTags(std::vector<std::string> tagNameList)
 {
+    std::vector<User> vec;//暂未实现
+    return vec;
 }
 
 bool UserServiceImpl::isAdmin(const HttpRequestPtr &request)

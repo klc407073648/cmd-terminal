@@ -15,11 +15,17 @@ void LoginFilter::doFilter(const HttpRequestPtr &req,
 {
     //Edit your logic here
     try{
-        //Check failed
+        //管理员用户校验
         if (!srvPtr_->isAdmin(req))
         {
             throw BusinessException(ErrorCode::PARAMS_ERROR(), "LoginFilter::非管理员用户，无查询权限");
         }
+
+        //接口存在性校验  todo
+        /*if (!srvPtr_->isAdmin(req))
+        {
+            throw BusinessException(ErrorCode::PARAMS_ERROR(), "LoginFilter::非管理员用户，无查询权限");
+        }*/
 
         //Passed
         fccb();

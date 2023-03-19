@@ -10,8 +10,6 @@ using namespace drogon;
 // LogService 纯虚函数，接口类
 namespace cmdterminal
 {
-  static std::string S_PLANET_CODE = "10000";
-
   class LogService;
   using LogServicePtr = std::shared_ptr<LogService>;
 
