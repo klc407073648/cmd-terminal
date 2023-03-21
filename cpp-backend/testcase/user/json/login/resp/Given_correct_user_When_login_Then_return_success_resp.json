@@ -1,0 +1,23 @@
+{
+    "code": 0,
+    "data": {
+        "avatarUrl": "",
+        "createTime": "2023-02-18 23:33:25",
+        "email": "",
+        "gender": 0,
+        "id": 1,
+        "idDelete": null,
+        "iphone": "",
+        "planetCode": "10000",
+        "profile": null,
+        "tags": null,
+        "updateTime": null,
+        "userAccount": "testuser",
+        "userPassword": null,
+        "userRole": 1,
+        "userStatus": 0,
+        "username": ""
+    },
+    "description": "",
+    "message": "ok"
+}
