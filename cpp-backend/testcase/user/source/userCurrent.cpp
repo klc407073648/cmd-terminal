@@ -3,14 +3,13 @@
 #include "CommonContants.h"
 #include "HttpTest.h"
 #include "userCurrent.h"
-#include "UserControllerTest.h"
 #include <Poco/Net/HTTPRequest.h>
 
 using namespace Poco;
 using namespace Poco::Net;
 
 // 登录正常用户,获取当前用户
-TEST_F(UserControllerTest, Current_Login_correct_user)
+TEST_F(UserControllerCurrentTest, Current_Login_correct_user)
 {
     //先登录
     HttpTest httpTest(BACKEND_IP, BACKEND_PORT, HTTPRequest::HTTP_POST, LOGIN_URI, HTTPMessage::HTTP_1_1,
@@ -37,7 +36,7 @@ TEST_F(UserControllerTest, Current_Login_correct_user)
 }
 
 // 登录不存在的用户
-TEST_F(UserControllerTest, Current_Login_no_exist_user)
+TEST_F(UserControllerCurrentTest, Current_Login_no_exist_user)
 {
     //先注销
     HttpTest httpTest(BACKEND_IP, BACKEND_PORT, HTTPRequest::HTTP_POST, LOGIN_URI, HTTPMessage::HTTP_1_1,

@@ -1,0 +1,6 @@
+{
+    "code": 0,
+    "data": "{\"status\":\"1\",\"count\":\"1\",\"info\":\"OK\",\"infocode\":\"10000\",\"forecasts\":[{\"city\":\"南京市\",\"adcode\":\"320100\",\"province\":\"江苏\",\"reporttime\":\"2023-03-22 06:48:53\",\"casts\":[{\"date\":\"2023-03-22\",\"week\":\"3\",\"dayweather\":\"阵雨\",\"nightweather\":\"小雨\",\"daytemp\":\"13\",\"nighttemp\":\"13\",\"daywind\":\"北\",\"nightwind\":\"北\",\"daypower\":\"4\",\"nightpower\":\"4\",\"daytemp_float\":\"12.7\",\"nighttemp_float\":\"13.4\"},{\"date\":\"2023-03-23\",\"week\":\"4\",\"dayweather\":\"小雨\",\"nightweather\":\"阴\",\"daytemp\":\"12\",\"nighttemp\":\"8\",\"daywind\":\"东北\",\"nightwind\":\"东北\",\"daypower\":\"5\",\"nightpower\":\"5\",\"daytemp_float\":\"11.8\",\"nighttemp_float\":\"7.5\"},{\"date\":\"2023-03-24\",\"week\":\"5\",\"dayweather\":\"小雨\",\"nightweather\":\"小雨\",\"daytemp\":\"12\",\"nighttemp\":\"5\",\"daywind\":\"东北\",\"nightwind\":\"北\",\"daypower\":\"5\",\"nightpower\":\"≤3\",\"daytemp_float\":\"11.5\",\"nighttemp_float\":\"4.6\"},{\"date\":\"2023-03-25\",\"week\":\"6\",\"dayweather\":\"多云\",\"nightweather\":\"多云\",\"daytemp\":\"8\",\"nighttemp\":\"4\",\"daywind\":\"北\",\"nightwind\":\"东北\",\"daypower\":\"≤3\",\"nightpower\":\"≤3\",\"daytemp_float\":\"8.2\",\"nighttemp_float\":\"3.6\"}]}]}",
+    "description": "",
+    "message": "ok"
+}

@@ -39,6 +39,15 @@ std::string HttpTest::readStringFromJson(const std::string &file)
 
 	std::string res = fast_writer.write(root);
 
+	//查找换行符的位置
+	int pos = res.find_last_of('\n');
+
+	// 如果找到了换行符
+	if (pos != std::string::npos) {
+		res.erase(pos, 1);// 在换行符的位置删除一个字符，即删除换行符
+	}
+
+
 	std::cout << "[readStringFromJson] file: " << file << ", res:" << res << std::endl;
 
 	return res;

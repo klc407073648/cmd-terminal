@@ -78,7 +78,6 @@ std::string InterfaceServiceImpl::getBackground(const HttpRequestPtr &request)
     {
         throw BusinessException(ErrorCode::PARAMS_ERROR(), funName + "接口不存在");
     }
-
     return imgurl;
 }
 
@@ -119,6 +118,8 @@ std::string InterfaceServiceImpl::getTranslate(const HttpRequestPtr &request)
         std::string keywords = json.isMember("keywords") ? json["keywords"].asString() : "";
         std::string from = json.isMember("config") ? ((json["config"]).isMember("from") ? json["config"]["from"].asString() : "") : "";
         std::string to = json.isMember("config") ? ((json["config"]).isMember("to") ? json["config"]["to"].asString() : "") : "";
+
+        LOG_INFO << "[getTranslate] keywords:" << keywords << ", from:" << from << ", to:" << to;
         std::string salt = std::to_string(trantor::Date::now().microSecondsSinceEpoch()).substr(0, 10); // 随机数
         std::string sign = utils::getMd5(appid + keywords + salt + key);
         toLower(sign);
@@ -132,7 +133,6 @@ std::string InterfaceServiceImpl::getTranslate(const HttpRequestPtr &request)
         req->setParameter("appid", appid); // APP ID	可在管理控制台查看
         req->setParameter("salt", salt);   // appid+q+salt+密钥 的MD5值
         req->setParameter("sign", sign);   // 要转小写才行
-
         translateRes = syncSendRequest(req, client);
     }
     catch (const DrogonDbException &e)
@@ -147,7 +147,7 @@ std::string InterfaceServiceImpl::getBackendVersion(const HttpRequestPtr &reques
 {
     std::string funName = __FUNCTION__;
     std::string version("");
-    
+
     try
     {
         // 1. 根据缓存获取接口信息
@@ -341,9 +341,18 @@ void InterfaceServiceImpl::getRequestParams(const std::string &json, std::map<st
 std::string InterfaceServiceImpl::syncSendRequest(const HttpRequestPtr &req, const HttpClientPtr &client, const std::string &keyword)
 {
     std::string res("");
-
+    
     std::pair<ReqResult, HttpResponsePtr> resp = client->sendRequest(req);
-    std::string respBody = static_cast<std::string>((resp.second)->body());
+    std::string respBody("");
+    if (resp.first == ReqResult::Ok)
+    {
+        respBody = static_cast<std::string>((resp.second)->body()); // TODO 翻译和背景 有问题，会core
+    }
+    else
+    {
+        LOG_ERROR << "[syncSendRequest] error";
+        return res;
+    }
 
     LOG_INFO << "[syncSendRequest] respBody:" << respBody;
 

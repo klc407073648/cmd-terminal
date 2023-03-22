@@ -2,7 +2,6 @@
 #include "gtest/gtest.h"
 #include "CommonContants.h"
 #include "HttpTest.h"
-#include "UserControllerTest.h"
 #include "userRegister.h"
 #include <Poco/Net/HTTPRequest.h>
 
@@ -10,7 +9,7 @@ using namespace Poco;
 using namespace Poco::Net;
 
 // 用户注册,非空校验
-TEST_F(UserControllerTest, Register_userAccount_Null)
+TEST_F(UserControllerRegisterTest, Register_userAccount_Null)
 {
     HttpTest httpTest(BACKEND_IP, BACKEND_PORT, HTTPRequest::HTTP_POST, REGISTER_URI, HTTPMessage::HTTP_1_1,
                       "application/json", REGISTER_PATH,
@@ -24,7 +23,7 @@ TEST_F(UserControllerTest, Register_userAccount_Null)
 }
 
 // 用户注册,账号长度校验
-TEST_F(UserControllerTest, Register_userAccount_Length_Less_than_4)
+TEST_F(UserControllerRegisterTest, Register_userAccount_Length_Less_than_4)
 {
     HttpTest httpTest(BACKEND_IP, BACKEND_PORT, HTTPRequest::HTTP_POST, REGISTER_URI, HTTPMessage::HTTP_1_1,
                       "application/json", REGISTER_PATH,
@@ -38,7 +37,7 @@ TEST_F(UserControllerTest, Register_userAccount_Length_Less_than_4)
 }
 
 // 用户注册,密码长度校验
-TEST_F(UserControllerTest, Register_userPassword_Length_Less_than_8)
+TEST_F(UserControllerRegisterTest, Register_userPassword_Length_Less_than_8)
 {
     HttpTest httpTest(BACKEND_IP, BACKEND_PORT, HTTPRequest::HTTP_POST, REGISTER_URI, HTTPMessage::HTTP_1_1,
                       "application/json", REGISTER_PATH,
@@ -52,7 +51,7 @@ TEST_F(UserControllerTest, Register_userPassword_Length_Less_than_8)
 }
 
 // 用户注册,账号重复性校验
-TEST_F(UserControllerTest, Register_userAccount_unique)
+TEST_F(UserControllerRegisterTest, Register_userAccount_unique)
 {
     HttpTest httpTest(BACKEND_IP, BACKEND_PORT, HTTPRequest::HTTP_POST, REGISTER_URI, HTTPMessage::HTTP_1_1,
                       "application/json", REGISTER_PATH,
@@ -66,7 +65,7 @@ TEST_F(UserControllerTest, Register_userAccount_unique)
 }
 
 // 用户注册,账号特殊字符校验
-TEST_F(UserControllerTest, Register_userAccount_contain_special_charater)
+TEST_F(UserControllerRegisterTest, Register_userAccount_contain_special_charater)
 {
     HttpTest httpTest(BACKEND_IP, BACKEND_PORT, HTTPRequest::HTTP_POST, REGISTER_URI, HTTPMessage::HTTP_1_1,
                       "application/json", REGISTER_PATH,
@@ -80,7 +79,7 @@ TEST_F(UserControllerTest, Register_userAccount_contain_special_charater)
 }
 
 // 用户注册,密码和校验密码相同性校验
-TEST_F(UserControllerTest, Register_userPassword_checkPassword_not_same)
+TEST_F(UserControllerRegisterTest, Register_userPassword_checkPassword_not_same)
 {
     HttpTest httpTest(BACKEND_IP, BACKEND_PORT, HTTPRequest::HTTP_POST, REGISTER_URI, HTTPMessage::HTTP_1_1,
                       "application/json", REGISTER_PATH,

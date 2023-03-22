@@ -1,0 +1,6 @@
+{
+    "code": 0,
+    "data": "{\"status\":\"1\",\"count\":\"1\",\"info\":\"OK\",\"infocode\":\"10000\",\"lives\":[{\"province\":\"天津\",\"city\":\"天津市\",\"adcode\":\"120000\",\"weather\":\"霾\",\"temperature\":\"14\",\"winddirection\":\"北\",\"windpower\":\"≤3\",\"humidity\":\"48\",\"reporttime\":\"2023-03-22 06:19:48\",\"temperature_float\":\"14.0\",\"humidity_float\":\"48.0\"}]}",
+    "description": "",
+    "message": "ok"
+}
