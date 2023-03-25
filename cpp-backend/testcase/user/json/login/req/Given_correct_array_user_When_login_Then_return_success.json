@@ -1,0 +1,12 @@
+[
+    {
+        "userAccount": "testuser",
+        "userPassword": "12345678",
+        "checkPassword": "12345678"
+    },
+    {
+        "userAccount": "testuser222",
+        "userPassword": "12345678333",
+        "checkPassword": "12345678333"
+    }
+]

@@ -39,16 +39,57 @@ std::string HttpTest::readStringFromJson(const std::string &file)
 
 	std::string res = fast_writer.write(root);
 
-	//查找换行符的位置
+	// 查找换行符的位置
 	int pos = res.find_last_of('\n');
 
 	// 如果找到了换行符
-	if (pos != std::string::npos) {
-		res.erase(pos, 1);// 在换行符的位置删除一个字符，即删除换行符
+	if (pos != std::string::npos)
+	{
+		res.erase(pos, 1); // 在换行符的位置删除一个字符，即删除换行符
 	}
 
-
 	std::cout << "[readStringFromJson] file: " << file << ", res:" << res << std::endl;
+
+	return res;
+}
+
+std::string HttpTest::readArrayStringFromJson(const std::string &file)
+{
+	Json::Reader reader;
+	Json::Value root;
+
+	const char *path = file.c_str();
+	std::ifstream infile(path);
+
+	reader.parse(infile, root);
+
+	int arraySize = root.size();
+
+	// 读取数组信息
+	//std::cout << "[readArrayStringFromJson] arraySize: " << arraySize << std::endl;
+	for (int i = 0; i < arraySize; i++)
+	{
+		Json::Value::Members mem = root[i].getMemberNames();
+		for (auto iter = mem.begin(); iter != mem.end(); iter++)
+		{
+			//std::cout << "[readArrayStringFromJson] key: " << *iter << "value: " << root[i][*iter].asString() << std::endl;
+		}
+	}
+
+	Json::FastWriter fast_writer;
+
+	std::string res = fast_writer.write(root);
+
+	// 查找换行符的位置
+	int pos = res.find_last_of('\n');
+
+	// 如果找到了换行符
+	if (pos != std::string::npos)
+	{
+		res.erase(pos, 1); // 在换行符的位置删除一个字符，即删除换行符
+	}
+
+	std::cout << "[readArrayStringFromJson] file: " << file << ", res:" << res << std::endl;
 
 	return res;
 }
@@ -57,10 +98,12 @@ std::string HttpTest::sendRequest()
 {
 	std::string result("");
 
-	if(_method == HTTPRequest::HTTP_POST){
+	if (_method == HTTPRequest::HTTP_POST)
+	{
 		result = sendPostRequest();
 	}
-	else if(_method == HTTPRequest::HTTP_GET){
+	else if (_method == HTTPRequest::HTTP_GET)
+	{
 		result = sendGetRequest();
 	}
 
@@ -79,15 +122,17 @@ std::string HttpTest::sendPostRequest()
 		HTTPRequest request(_method, _uri, _version);
 		request.setContentType(_contentType);
 
-		if( _reqJsonFile.empty()){
+		if (_reqJsonFile.empty())
+		{
 			session.sendRequest(request);
 		}
-		else{
+		else
+		{
 			std::string strBody = readStringFromJson(_rootPath + _reqJsonFile); // json格式的字符串
 			request.setContentLength((int)strBody.length());
-			session.sendRequest(request) << strBody;// 发送数据
+			session.sendRequest(request) << strBody; // 发送数据
 		}
-		
+
 		HTTPResponse response;
 		std::istream &is = session.receiveResponse(response);
 		const HTTPResponse::HTTPStatus &status = response.getStatus();

@@ -13,12 +13,13 @@ public:
 	~HttpTest();
 
 public:
-    std::string readStringFromJson(const std::string &file);
+	std::string readStringFromJson(const std::string &file);
+	std::string readArrayStringFromJson(const std::string &file);
 	std::string sendRequest();
 	std::string sendPostRequest();
 	std::string sendGetRequest();
 
-	//不能这样写
+	// 不能这样写
 	/*
 	const std::string &getRespFullPath()
 	{
