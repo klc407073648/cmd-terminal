@@ -3,6 +3,7 @@ project(cmdterminal CXX)
 
 # 依赖StiBel库的内容 封装成StiBel.cmake文件
 set(CMAKE_PREFIX_PATH   "${CMAKE_CURRENT_SOURCE_DIR}/lib/3partlib/lib64/cmake")
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/SpecialDeal.cmake)
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/stibel.cmake)
 # 依赖StiBel库的内容
 
