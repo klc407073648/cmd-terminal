@@ -6,7 +6,7 @@
 		]
 	},
 	"listeners": [{
-			"address": "$CMD_TERMINAL_BACKEND_IP",
+			"address": "0.0.0.0",
 			"port": $CMD_TERMINAL_BACKEND_PORT,
 			"https": false
 		}
