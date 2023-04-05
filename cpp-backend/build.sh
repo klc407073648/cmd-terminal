@@ -13,5 +13,5 @@ tar -zxf StiBel_V2.1.1.tar.gz
 
 # 4.运行程序
 cd ./build/
-cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_BUILD_VERSION=V2.1.1 ..
+cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_BUILD_VERSION=V2.1.1 .. && make
 ./cmdterminal &
