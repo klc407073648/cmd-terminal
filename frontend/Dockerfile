@@ -1,14 +1,12 @@
-FROM node:18-buster-slim
+FROM nginx
 
-RUN npm install -g http-server
+WORKDIR /usr/share/nginx/html/
+USER root
 
-WORKDIR /src
+COPY ./docker/nginx.conf /etc/nginx/conf.d/default.conf
 
-COPY . .
-
-RUN npm install
-
-RUN npm run build
+COPY ./dist  /usr/share/nginx/html/
 
 EXPOSE 80
-CMD [ "http-server", "dist" ]
+
+CMD ["nginx", "-g", "daemon off;"]

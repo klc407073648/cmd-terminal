@@ -21,7 +21,8 @@ export default defineConfig({
     proxy: {// 跨域代理
       '^/api': {
         // target: 'http://' + env.VUE_APP_BASE_API,
-        target: 'http://81.68.132.31:8082/api', //
+        // target: 'http://81.68.132.31:8082/api',
+        target: 'http://$CMD_TERMINAL_BACKEND_IP:$CMD_TERMINAL_BACKEND_PORT/api', 
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
       },
