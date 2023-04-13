@@ -7,7 +7,7 @@
 	},
 	"listeners": [{
 			"address": "0.0.0.0",
-			"port": 8082,
+			"port": 8005,
 			"https": false
 		}
 	],
@@ -28,7 +28,7 @@
 		"host": "127.0.0.1",
 		"port": 6380,
 		"username": "",
-		"passwd": "klc456789",
+		"passwd": "123456",
 		"db": 0,
 		"is_fast": false,
 		"number_of_connections": 1,

@@ -19,6 +19,11 @@ include(${PROJECT_SOURCE_DIR}/cmake/linklib.cmake)
 
 # 依赖StiBel库的内容
 
+#EXECUTABLE_OUTPUT_PATH为生成可执行文件路径，LIBRARY_OUTPUT_PATH为生成库文件路径，BUILD_LIB_DIR生成库的路径
+SET(EXECUTABLE_OUTPUT_PATH      ${PROJECT_SOURCE_DIR}/deploy/)
+SET(BUILD_LIB_DIR               ${PROJECT_SOURCE_DIR}/deploy/lib)
+SET(LIBRARY_OUTPUT_PATH         ${BUILD_LIB_DIR})
+
 include(CheckIncludeFileCXX)
 
 check_include_file_cxx(any HAS_ANY)
@@ -50,7 +55,7 @@ ${PROJECT_SOURCE_DIR}/src/plugins/src/*.* ${PROJECT_SOURCE_DIR}/src/services/src
 #drogon_create_views(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/views
 #                    ${CMAKE_CURRENT_BINARY_DIR} TRUE)
 
-add_executable(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/src/main.cc ${PROJECT_DROGON_FILES})                    
+add_executable(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/src/main/main.cc ${PROJECT_DROGON_FILES})                    
 
 # 链接drogon库
 find_package(Drogon CONFIG REQUIRED)
@@ -68,5 +73,4 @@ else ()
     message(STATUS "use c++20")
 endif ()
 
-add_subdirectory(test)
 add_subdirectory(testcase)

@@ -5,7 +5,7 @@ using namespace drogon;
 int main()
 {
     //app().addListener("0.0.0.0", 8082).run();
-	app().loadConfigFile("../config.json").run();
+	app().loadConfigFile("../conf/config.json").run();
     app().registerPostHandlingAdvice([](const drogon::HttpRequestPtr &,
                                         const drogon::HttpResponsePtr &resp) {
         resp->addHeader("Access-Control-Allow-Origin", "*");
