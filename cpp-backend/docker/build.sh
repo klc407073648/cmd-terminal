@@ -53,8 +53,8 @@ function tarProject()
 
    cd $work_path
 
-   mkdir -p $work_path/log
-   touch $work_path/log/cmdterminal.log 
+   mkdir -p $work_path/logs
+   touch $work_path/logs/cmdterminal.log 
    
    tar -zcvf cmd-terminal.tar.gz ./lib ./deploy ./conf ./docker ./logs
 

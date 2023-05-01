@@ -7,7 +7,7 @@ function runMyprj()
 
     cd $work_path/deploy
 
-    ./cmdterminal & >> $log_dir/cmdterminal.log
+    ./cmdterminal &
 
     logDebug "runMyprj end"
 }
