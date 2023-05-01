@@ -1,8 +1,12 @@
 #include<string>
 
-const std::string BACKEND_IP = "$CMD_TERMINAL_BACKEND_IP";
-const int BACKEND_PORT = $CMD_TERMINAL_BACKEND_PORT;
-const std::string JSON_ROOT_PATH = "/home/stibel/cpp-backend/testcase";
+//const std::string BACKEND_IP = "$CMD_TERMINAL_BACKEND_IP";
+//const int BACKEND_PORT = 8005;
+//const std::string JSON_ROOT_PATH = "$CMD_TERMINAL_ROOT_PATH/testcase";
+
+const std::string BACKEND_IP = "127.0.0.1";
+const int BACKEND_PORT = 8005;
+const std::string JSON_ROOT_PATH = "/home/stibel/cmd-terminal/cpp-backend/testcase";
 
 const std::string CURRENT_URI = "/api/user/current";
 const std::string CURRENT_PATH = JSON_ROOT_PATH + "/user/json/current";
